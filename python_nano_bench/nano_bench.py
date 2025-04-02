@@ -5,9 +5,9 @@ import os
 import re
 import subprocess
 import sys
-from typing import Union
+from typing import Union, List, Tuple
 from subprocess import Popen, PIPE, STDOUT
-from pathlib import Path, List
+from pathlib import Path
 
 from collections import OrderedDict
 from shutil import copyfile
@@ -28,6 +28,7 @@ class NanoBench:
         """ checks if the following programs are available:
             - as
             - objcopy
+            - modprobe
         """
         p = Popen(["as", '--version'], stdout=PIPE, stderr=STDOUT)
         p.wait()
@@ -56,7 +57,7 @@ class NanoBench:
             pass  # TODO
         else:
             with open(filename, 'w') as f:
-                f.write(content)
+                f.write(str(content))
 
     @staticmethod
     def read_file(filename: str, root: bool):
@@ -68,7 +69,7 @@ class NanoBench:
                 return f.read()
 
     @staticmethod
-    def run_command(cmds: [str], root: bool) -> (bool, str):
+    def run_command(cmds: List[str], root: bool) -> Tuple[bool, str]:
         """
         """
         if root:
@@ -81,7 +82,8 @@ class NanoBench:
             print("command failed")
             return False, ""
 
-        s = p.stdout.read()
+        assert p.stdout
+        s = str(p.stdout.read())
         return True, s
 
     @staticmethod

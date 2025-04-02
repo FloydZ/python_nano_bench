@@ -8,6 +8,38 @@ from setuptools.command.develop import develop
 from setuptools.command.egg_info import egg_info
 
 
+def read_text_file(path):
+    """ read a test file and returns its content"""
+    with open(os.path.join(os.path.dirname(__file__), path)) as file:
+        return file.read()
+
+def custom_command():
+    """ build the needed `AssemblyLine` package """
+    if sys.platform in ['linux']:
+        os.system('./build.sh')
+
+
+class CustomInstallCommand(install):
+    """ install script """
+    def run(self):
+        custom_command()
+        install.run(self)
+
+
+class CustomDevelopCommand(develop):
+    """ develop script """
+    def run(self):
+        custom_command()
+        develop.run(self)
+
+
+class CustomEggInfoCommand(egg_info):
+    """ custom script """
+    def run(self):
+        custom_command()
+        egg_info.run(self)
+
+
 setup(
     name='python_nano_bench',
     version='0.0.1',
@@ -15,20 +47,19 @@ setup(
     author_email='zweydfg8+github@rub.de',
     description='TODO',
     long_description="TODO",
-    long_description_content_type='text/markdown',
-    install_requires=["setuptools", ],
-    cmdclass={
-        'install': install,
-        'develop': develop,
-        'egg_info': egg_info,
-    },
-    #package_data={'': ['./']},
-    #requires=[],
     project_urls={
         'Source Code': 'https://github.com/FloydZ/python_nano_bench',
         "Author's Website": 'https://pingfloyd.de',
         'Documentation': '',
     },
+    install_requires=["setuptools", ],
+    cmdclass={
+        'install': CustomInstallCommand,
+        'develop': CustomDevelopCommand,
+        'egg_info': CustomEggInfoCommand,
+    },
+    package_dir= {'': 'python_nano_bench'},
+    requires=[],
     python_requires='>=3.6',
     classifiers=[
         'Development Status :: 1 - Pre-Alpha',
@@ -41,6 +72,7 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Topic :: Utilities',
     ],
 )
