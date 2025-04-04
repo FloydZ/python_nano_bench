@@ -559,7 +559,12 @@ class NanoBench:
 
 def main():
     n = NanoBench()
-    n.remove_empty_events().run("ADD RAX, RBX; ADD RBX, RAX")
+    # TODO: the second instructions is actually `vpaddb  ymm1, ymm0, ymmword ptr [rip + .LCPI0_0]`
+    # but `[rip + somethong]` is not a valid address, thus we need to replace it with 
+    # [rax] and add "-init_asm='MOV RAX, R14; SUB RAX, 8; MOV [RAX], RAX'". Now rax points to a valid address
+    s1 = "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymm1; vpblendvb ymm0, ymm1, ymm0, ymm1;"
+    s2 = "ADD RAX, RBX; ADD RBX, RAX"
+    n.remove_empty_events().run(s1)
 
 
 
