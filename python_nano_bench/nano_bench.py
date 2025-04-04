@@ -3,11 +3,15 @@
 import re
 import subprocess
 import sys
+import os
+import pprint
 from typing import Union, List, Tuple
 from subprocess import Popen, PIPE, STDOUT
 from pathlib import Path
 
 from shutil import copyfile
+
+from cpuid.cpuid import CPUID, micro_arch
 
 PFC_START_ASM = '.quad 0xE0B513B1C2813F04'
 PFC_STOP_ASM = '.quad 0xF0B513B1C2813F04'
@@ -17,7 +21,25 @@ class NanoBench:
     """
     wrapper around ./nanoBench
     """
+
+
+    __micro_arch =  ['SNB', 'IVB', 'HSW', 'BDW', 'SKL', 'SKX', 'CLX', 'KBL', 
+                     'CFL', 'CNL', 'ADL-P', 'ADL-E']
+    march_translation = {
+        'ADL-E' : 'AlderLakeE',
+        'ADL-P' : 'AlderLakeP',
+        'BDW' : 'Broadwell',
+        'CLX' : 'CascadeLakeX',
+        'HSM' : 'Broadwell',
+        'ISV' : 'IvyBridhe',
+        'SND' : 'SandyBridge',
+        'SKL' : 'Skylake',
+        'SKX' : 'SkylakeX',
+    }
+
     def __init__(self):
+        # if set to true, all benchmarks will be performed using the kernel 
+        # mode. 
         self.kernel_mode = False
 
         # nanoBennch kernel and user params
@@ -29,19 +51,66 @@ class NanoBench:
         self._max = False
         self._median = False
         self._avg = False
-        self._alignment_offset = False
-        self._initial_warm_up_count = False
-        self._warm_up_count = False
-        self._n_measurements = False
-        self._loop_count = False
-        self._unroll_count = False
-        self._cpu = False
+        self._alignment_offset = 0
+        self._initial_warm_up_count = 0
+        self._warm_up_count = 0
+        self._n_measurements = 0
+        self._loop_count = 0
+        self._unroll_count = 0
+        self._cpu = -1
+        self._end_to_end = False
+        self._os = False
+        self._usr = False
+        self._no_normalization = False
+        self._df = False
+        self._fixed_counters = False
+        self._basic_mode = False
+        
+        # files
         self._code_one_time_init = False
         self._code_late_init = False
         self._code_init = False
-        self._end_to_end = False
+        self._asm_one_time_init = False
+        self._asm_late_init = False
+        self._asm_init = False
+        
+        # this refers to the `config file` which is used to determine which 
+        # performance metrics is supported by the cpu
+        self._config = None
+        self.config(NanoBench._get_current_cpu_generation())
+    
+    @staticmethod
+    def _get_current_cpu_generation() -> str:
+        """
+        :return the cpu architecture of the cpu the script is currently run on.
+        """
+        return micro_arch(CPUID())
 
-        pass
+    def _get_cpu_configuration_path(self, march: str):
+        """
+        NOTE: the returned path is relative to ${PATH_OF_THIS_FILE}/deps/nanoBench
+        :return the path to the configuration file containing all performance 
+            metrics supported by the local cpu.
+        """
+        march = NanoBench.march_translation[march]
+        return f"./configs/cfg_{march}_all.txt"
+        #return f"deps/nanoBench/configs/cfg_{march}_all_core.txt"
+
+    @staticmethod
+    def _parse_user_nanobench_output(s: List[str],
+                                     remove_zeros: bool=False):
+        ret = {}
+        for line in s:
+            splits = line.split(":")
+            assert len(splits) == 2
+            d = float(splits[1])
+            if remove_zeros:
+                if d > 0.0:
+                    ret[splits[0]] = d
+            else: 
+                ret[splits[0]] = d
+
+        return ret
 
     @staticmethod
     def available():
@@ -106,22 +175,35 @@ class NanoBench:
 
     @staticmethod
     def run_command(cmds: List[str],
-                    root: bool) -> Tuple[bool, str]:
+                    root: bool,
+                    cwd: str="") -> Tuple[bool, List[str]]:
         """
-        :param cmfd
+        :param cmds: list of strings which is a single command
+        :param root: if true the command will be executed as root 
+        :param cwd: current working dir 
         """
         if root:
             # TODO different super user command
+            # use elevate oder so
             cmds = ["sudo"] + cmds
 
-        p = Popen(cmds, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
+        if cwd == "":
+            cwd = os.path.dirname(os.path.realpath(__file__)) 
+
+        pprint.pprint(cmds)
+        p = Popen(cmds, stdin=PIPE, stdout=PIPE, stderr=STDOUT, cwd=cwd)
         p.wait()
+        assert p.stdout
         if p.returncode != 0:
             print("command failed")
-            return False, ""
+            print(str(p.stdout.read()))
+            return False, []
 
-        assert p.stdout
-        s = str(p.stdout.read())
+        s = p.stdout.readlines()
+        s = [str(a.decode().removesuffix("\n")) for a in s]
+
+        # filter a few things
+        s = [a for a in s if not "Note:" in a]
         return True, s
 
     @staticmethod
@@ -252,15 +334,13 @@ class NanoBench:
         """ NOTE: Needs root rights
         :param state: either 0 for disable HT
                           or 1 to enable HT
-
         :return true/false: if it worked or not
         """
         if -1 > state > 1:
             print('either pass 0/1 to disable/enable ht')
             return False
 
-        # TODO support a different super user command
-        cmd = ["sudo", "echo"]
+        cmd = ["echo"]
         if state == 0:
             cmd.append("off")
         if state == 1:
@@ -268,17 +348,12 @@ class NanoBench:
 
         cmd.append(">")
         cmd.append("/sys/devices/system/cpu/smt/control")
-        p = Popen(cmd, stdin=PIPE, stdout=STDOUT, stderr=STDOUT)
-        p.wait()
-        if p.returncode != 0:
-            print("set HT failed")
-            return False
-
-        return True
+        b, _ = NanoBench.run_command(cmd, True)
+        return b
 
     def prefix(self) -> bool:
         """
-
+        TODO describe
         """
         # TODO check if atom/core
         self.prev_rdpmc = NanoBench.read_file(filename="/sys/bus/event_source/devices/cpu", root=True)
@@ -296,6 +371,7 @@ class NanoBench:
 
     def postfix(self):
         """
+        TODO describe
         """
         if self.prev_nmi_watchdog != 0:
             NanoBench.write_file(filename="/proc/sys/kernel/nmi_watchdog", content=self.prev_nmi_watchdog, root=True)
@@ -305,20 +381,55 @@ class NanoBench:
 
     def run(self, asm: str) -> bool:
         """
+        TODO describe
         """
-        if not self.prefix():
-            return False
+        cwd = "./deps/nanoBench/"
+        cmd = ["bash"]
+        cmd.append("nanoBench.sh")
+        cmd.append("-asm")
+        #cmd.append("\"" + asm + "\"")
+        cmd.append(asm)
 
-        obj_file = "TODO"
-        cmd = ["deps/nanoBench/user/nanoBench", obj_file]
-        if self._verbose: cmd += "--verbose"
-        if self._remove_empty_events: cmd += "--remove_empty_events"
-        NanoBench.run_command(cmd, True)
+        # add config file
+        assert self._config
+        cmd.append("-config")
+        cmd.append(self._config)
 
-        if not self.postfix():
-            return False
-
+        if self._verbose: cmd += ["-verbose"]
+        # note supported by user
+        # if self._remove_empty_events: cmd += "-remove_empty_events"
+        if self._no_mem: cmd += "-no_mem"
+        if self._range: cmd += "-range"
+        if self._max: cmd += "-max"
+        if self._min: cmd += "-min"
+        if self._median: cmd += "-median"
+        if self._avg: cmd += "-avg"
+        if self._alignment_offset: cmd += "-alignment_offset="+str(self._alignment_offset)
+        if self._initial_warm_up_count: cmd += "-initial_warm_up_count="+str(self._initial_warm_up_count)
+        if self._warm_up_count: cmd += "-warm_up_count="+str(self._warm_up_count)
+        if self._n_measurements: cmd += "-n_measurements="+str(self._n_measurements)
+        if self._loop_count: cmd += "-loop_count="+str(self._loop_count)
+        if self._unroll_count: cmd += "-unroll_count="+str(self._unroll_count)
+        if self._cpu != -1: cmd += "-cpu="+str(self._cpu)
+        if self._end_to_end: cmd += "-end_to_end"
+        if self._os: cmd += "-os"
+        if self._usr: cmd += "-usr"
+        if self._no_normalization: cmd += "-no_normalization"
+        if self._df: cmd += "-df"
+        if self._fixed_counters: cmd += "-fixed_counters"
+        if self._basic_mode: cmd += "-basic_mode"
+        b, s = NanoBench.run_command(cmd, root=True, cwd=cwd)
+        if not b:
+            return False 
+        data = NanoBench._parse_user_nanobench_output(s, self._remove_empty_events)
+        pprint.pprint(data)
         return True
+
+    def config(self, march: str):
+        """
+        :param march: must be in 
+        """
+        self._config = self._get_cpu_configuration_path(march)
 
     def verbose(self) -> 'NanoBench':
         """Outputs the results of all performance counter readings."""
@@ -326,76 +437,131 @@ class NanoBench:
         return self
 
     def remove_empty_events(self) -> 'NanoBench':
-        """"""
+        """Removes events from the output that did not occur."""
         self._remove_empty_events = True
         return self
 
     def no_mem(self) -> 'NanoBench':
-        """"""
+        """The code for reading the perf. ctrs. does not make memory accesses."""
         self._no_mem = True
         return self
 
     def range(self) -> 'NanoBench':
-        """"""
-        self._ran = True
+        """Outputs the range of the measured values (i.e., the minimum and 
+        the maximum).
+        """
+        self._range = True
         return self
 
-    def remove_empgety_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def max(self) -> 'NanoBench':
+        """Selects the maximum as the aggregate function."""
+        self._max = True
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def min(self) -> 'NanoBench':
+        """Selects the minimum as the aggregate function."""
+        self._min = True
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def median(self) -> 'NanoBench':
+        """Selects the median as the aggregate function."""
+        self._median = True
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def avg(self) -> 'NanoBench':
+        """Selects the arithmetic mean (excluding the top and bottom 20%% of 
+        the values) as the aggregate function.
+        """
+        self._avg = True
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def alignment_offset(self, offset: int) -> 'NanoBench':
+        """Alignment offset"""
+        self._alignment_offset = offset
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def initial_warm_up_count(self, count: int) -> 'NanoBench':
+        """Number of runs before any measurement is performed."""
+        self._initial_warm_up_count = count
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def warm_up_count(self, count: int) -> 'NanoBench':
+        """Number of runs before the first measurement gets recorded."""
+        self._warm_up_count = count
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def n_measurements(self, count: int) -> 'NanoBench':
+        """Number of times the measurements are repeated."""
+        self._n_measurements = count
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def loop_count(self, count: int) -> 'NanoBench':
+        """Number of iterations of the inner loop."""
+        self._loop_count = count
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def unroll_count(self, count: int) -> 'NanoBench':
+        """Number of copies of the benchmark code inside the inner loop."""
+        self._unroll_count = count
         return self
 
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
-        return self
-    def remove_empty_events(self) -> 'NanoBench':
-        """"""
-        self._remove_empty_events = True
+    def cpu(self, cpu_cnt: int) -> 'NanoBench':
+        """ Pins the measurement thread to CPU n."""
+        self._cpu = cpu_cnt
         return self
 
+    def end_to_end(self) -> 'NanoBench':
+        """Do not try to remove overhead."""
+        self._end_to_end = True
+        return self
+    
+    def usr(self) -> 'NanoBench':
+        """If 1, counts events at a privilege level greater than 0. 
+        NOTE: only for user
+        """
+        self._user = True
+        return self 
+
+    def os(self) -> 'NanoBench':
+        """If 1, counts events at a privilege 0. 
+        NOTE: only for user
+        """
+        self._os = True
+        return self 
+
+    def no_normalization(self) -> 'NanoBench':
+        """The measurement results are not divided by the number of repetitions
+        NOTE: only for user
+        """
+        self._no_normalization = True
+        return self 
+
+    def df(self) -> 'NanoBench':
+        """Drains front-end buffers between executing code_late_init and code.
+        NOTE: only for user
+        """
+        self._df = True
+        return self 
+
+    def fixed_counters(self) -> 'NanoBench':
+        """Reads the fixed-function performance counters.
+        NOTE: only for user
+        """
+        self._fixed_counters = True
+        return self 
+
+    def basic_mode(self) -> 'NanoBench':
+        """enables basic mode
+        NOTE: only for user
+        """
+        self._basic_mode = True
+        return self 
+
+def main():
+    n = NanoBench()
+    n.remove_empty_events().run("ADD RAX, RBX; ADD RBX, RAX")
+
+
+
+if __name__ == "__main__":
+   main()
