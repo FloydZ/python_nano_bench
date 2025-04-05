@@ -13,6 +13,8 @@ from shutil import copyfile
 
 from cpuid.cpuid import CPUID, micro_arch
 
+from asm import Asm
+
 PFC_START_ASM = '.quad 0xE0B513B1C2813F04'
 PFC_STOP_ASM = '.quad 0xF0B513B1C2813F04'
 
@@ -147,7 +149,7 @@ class NanoBench:
         :param filename: full path to the file to write to
         :param content: the content to write to the file
         :param root: if true, temporary root rights are needed to write to the 
-            given file. Hence a special code path is used.
+            given file. Hence, a special code path is used.
         """
         if root:
             pass  # TODO
@@ -163,7 +165,7 @@ class NanoBench:
         """ simple wrapper to read form a file
         :param filename: the full path to read from
         :param root: if true, temporary root rights are needed to write to the 
-            given file. Hence a special code path is used.
+            given file. Hence, a special code path is used.
         :return the content of the file as a string
         """
         if root:
@@ -382,13 +384,22 @@ class NanoBench:
     def run(self, asm: str) -> bool:
         """
         TODO describe
+        :param asm:
+
         """
+        sasm = asm.split(";")
+        sasm, init_asm = Asm.parse(sasm)
+        sasm = "; ".join(sasm)
+
         cwd = "./deps/nanoBench/"
         cmd = ["bash"]
         cmd.append("nanoBench.sh")
         cmd.append("-asm")
-        #cmd.append("\"" + asm + "\"")
-        cmd.append(asm)
+        cmd.append(sasm)
+
+        if len(init_asm) > 0:
+            cmd.append("-asm_init")
+            cmd.append(init_asm)
 
         # add config file
         assert self._config
@@ -562,7 +573,7 @@ def main():
     # TODO: the second instructions is actually `vpaddb  ymm1, ymm0, ymmword ptr [rip + .LCPI0_0]`
     # but `[rip + somethong]` is not a valid address, thus we need to replace it with 
     # [rax] and add "-init_asm='MOV RAX, R14; SUB RAX, 8; MOV [RAX], RAX'". Now rax points to a valid address
-    s1 = "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymm1; vpblendvb ymm0, ymm1, ymm0, ymm1;"
+    s1 = "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymmword ptr [rip + .LCPI0_0]; vpblendvb ymm0, ymm1, ymm0, ymm1;"
     s2 = "ADD RAX, RBX; ADD RBX, RAX"
     n.remove_empty_events().run(s1)
 
