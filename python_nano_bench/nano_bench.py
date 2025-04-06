@@ -432,6 +432,8 @@ class NanoBench:
         b, s = NanoBench.run_command(cmd, root=True, cwd=cwd)
         if not b:
             return False 
+
+        # TODO verbose and range do alter the output format
         data = NanoBench._parse_user_nanobench_output(s, self._remove_empty_events)
         pprint.pprint(data)
         return True
@@ -570,12 +572,8 @@ class NanoBench:
 
 def main():
     n = NanoBench()
-    # TODO: the second instructions is actually `vpaddb  ymm1, ymm0, ymmword ptr [rip + .LCPI0_0]`
-    # but `[rip + somethong]` is not a valid address, thus we need to replace it with 
-    # [rax] and add "-init_asm='MOV RAX, R14; SUB RAX, 8; MOV [RAX], RAX'". Now rax points to a valid address
-    s1 = "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymmword ptr [rip + .LCPI0_0]; vpblendvb ymm0, ymm1, ymm0, ymm1;"
-    s2 = "ADD RAX, RBX; ADD RBX, RAX"
-    n.remove_empty_events().run(s1)
+    s = "ADD RAX, RBX; ADD RBX, RAX"
+    n.remove_empty_events().run(s)
 
 
 
