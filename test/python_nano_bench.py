@@ -18,6 +18,7 @@ def test_simple():
 def test_flags():
     ts = [ 
         "ADD RAX, RBX; ADD RBX, RAX",
+        "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymmword ptr [rax]; vpblendvb ymm0, ymm1, ymm0, ymm1;"
     ]
 
     n = NanoBench()
