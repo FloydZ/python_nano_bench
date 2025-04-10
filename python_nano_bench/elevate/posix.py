@@ -1,17 +1,28 @@
+#!/usr/bin/env python3
+"""
+linux/darwin/posix wrapper around sudo/gksudo,... or any privileges escalation
+tool.
+"""
+
 import errno
 import os
 import sys
-try:
-    from shlex import quote
-except ImportError:
-    from pipes import quote
+from shlex import quote
 
 
 def quote_shell(args):
+    """
+    :param args:
+    :return
+    """
     return " ".join(quote(arg) for arg in args)
 
 
 def quote_applescript(string):
+    """
+    :param args:
+    :return
+    """
     charmap = {
         "\n": "\\n",
         "\r": "\\r",
@@ -22,7 +33,11 @@ def quote_applescript(string):
     return '"%s"' % "".join(charmap.get(char, char) for char in string)
 
 
-def elevate(show_console=True, graphical=True):
+def elevate(_=True, graphical=True):
+    """
+    :param graphical:
+    :return
+    """
     if os.getuid() == 0:
         return
 

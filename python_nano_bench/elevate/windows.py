@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+"""
+wrapper around the windows root system
+"""
+
 import ctypes
 from ctypes import POINTER, c_ulong, c_char_p, c_int, c_void_p
 from ctypes.wintypes import HANDLE, BOOL, DWORD, HWND, HINSTANCE, HKEY
@@ -19,6 +24,9 @@ PDWORD = ctypes.POINTER(DWORD)
 
 
 class ShellExecuteInfo(ctypes.Structure):
+    """
+    wrapper around `ShellExecuteInfo`
+    """
     _fields_ = [
         ('cbSize',       DWORD),
         ('fMask',        c_ulong),
@@ -61,9 +69,10 @@ CloseHandle.argtypes = (HANDLE, )
 CloseHandle.restype = BOOL
 
 
-# At last, the actual implementation!
-
-def elevate(show_console=True, graphical=True):
+def elevate(show_console=True, _=True):
+    """
+    :param show_console
+    """
     if windll.shell32.IsUserAnAdmin():
         return
 

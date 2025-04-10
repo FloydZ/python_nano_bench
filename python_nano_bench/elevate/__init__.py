@@ -1,6 +1,15 @@
+#!/usr/bin/env python3
+"""
+wrapper around the root 
+"""
+
 import sys
 import os
-from typing import 
+from typing import List
+if sys.platform.startswith("win"):
+    from .windows import elevate as _elevate
+else:
+    from .posix import elevate as _elevate
 
 
 def elevate(show_console=True, graphical=False):
@@ -17,20 +26,19 @@ def elevate(show_console=True, graphical=False):
     :param graphical: (Linux / macOS only) if True, attempt to use graphical
         programs (gksudo, etc). Ignored on Windows.
     """
-    if sys.platform.startswith("win"):
-        from elevate.windows import elevate
-    else:
-        from elevate.posix import elevate
-    elevate(show_console, graphical)
+    _elevate(show_console, graphical)
 
 
-def run_as_root(cmd: []):
+def run_as_root(cmd: List[str]):
     """
+    :param cmd:
+    :return the return value of the command.
     """
     pass
 
 def is_root():
     """
+    :return true/false if root or not
     """
     return os.getuid() == 0
 
