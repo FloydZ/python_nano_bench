@@ -1,7 +1,9 @@
 import sys
+import os
+from typing import 
 
 
-def elevate(show_console=True, graphical=True):
+def elevate(show_console=True, graphical=False):
     """
     Re-launch the current process with root/admin privileges
 
@@ -21,3 +23,20 @@ def elevate(show_console=True, graphical=True):
         from elevate.posix import elevate
     elevate(show_console, graphical)
 
+
+def run_as_root(cmd: []):
+    """
+    """
+    pass
+
+def is_root():
+    """
+    """
+    return os.getuid() == 0
+
+
+if __name__ == '__main__':
+    # just a few tests
+    print("before ", is_root())
+    elevate()
+    print("after ", is_root())

@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+tests the assembly helper file
+"""
+
 from python_nano_bench.asm import Asm 
 
 def test_simple():

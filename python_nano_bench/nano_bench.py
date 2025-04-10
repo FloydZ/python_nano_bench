@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 """ wrapper around the `./nanoBench` command """
+import os
+import pprint
 import re
 import subprocess
 import sys
-import os
-import pprint
-from typing import Union, List, Tuple
-from subprocess import Popen, PIPE, STDOUT
 from pathlib import Path
-
 from shutil import copyfile
+from subprocess import PIPE, STDOUT, Popen
+from typing import List, Tuple, Union
 
-from cpuid.cpuid import CPUID, micro_arch
-
-from asm import Asm
+from .asm import Asm
+from .cpuid.cpuid import CPUID, micro_arch
 
 PFC_START_ASM = '.quad 0xE0B513B1C2813F04'
 PFC_STOP_ASM = '.quad 0xF0B513B1C2813F04'
@@ -25,7 +23,7 @@ class NanoBench:
     """
 
 
-    __micro_arch =  ['SNB', 'IVB', 'HSW', 'BDW', 'SKL', 'SKX', 'CLX', 'KBL', 
+    __micro_arch =  ['SNB', 'IVB', 'HSW', 'BDW', 'SKL', 'SKX', 'CLX', 'KBL',
                      'CFL', 'CNL', 'ADL-P', 'ADL-E']
     march_translation = {
         'ADL-E' : 'AlderLakeE',
@@ -40,8 +38,8 @@ class NanoBench:
     }
 
     def __init__(self):
-        # if set to true, all benchmarks will be performed using the kernel 
-        # mode. 
+        # if set to true, all benchmarks will be performed using the kernel
+        # mode.
         self.kernel_mode = False
 
         # nanoBennch kernel and user params
@@ -67,7 +65,7 @@ class NanoBench:
         self._df = False
         self._fixed_counters = False
         self._basic_mode = False
-        
+
         # files
         self._code_one_time_init = False
         self._code_late_init = False
@@ -75,12 +73,12 @@ class NanoBench:
         self._asm_one_time_init = False
         self._asm_late_init = False
         self._asm_init = False
-        
-        # this refers to the `config file` which is used to determine which 
+
+        # this refers to the `config file` which is used to determine which
         # performance metrics is supported by the cpu
         self._config = None
         self.config(NanoBench._get_current_cpu_generation())
-    
+
     @staticmethod
     def _get_current_cpu_generation() -> str:
         """
@@ -109,7 +107,7 @@ class NanoBench:
             if remove_zeros:
                 if d > 0.0:
                     ret[splits[0]] = d
-            else: 
+            else:
                 ret[splits[0]] = d
 
         return ret
@@ -121,23 +119,23 @@ class NanoBench:
             - objcopy
             - modprobe
         """
-        p = Popen(["as", '--version'], stdout=PIPE, stderr=STDOUT)
-        p.wait()
-        if p.returncode != 0:
-            print("`as` is not available")
-            return False
+        with Popen(["as", '--version'], stdout=PIPE, stderr=STDOUT) as p:
+            p.wait()
+            if p.returncode != 0:
+                print("`as` is not available")
+                return False
 
-        p = Popen(["objcopy", '--version'], stdout=PIPE, stderr=STDOUT)
-        p.wait()
-        if p.returncode != 0:
-            print("`objcopy` is not available")
-            return False
+        with Popen(["objcopy", '--version'], stdout=PIPE, stderr=STDOUT) as p:
+            p.wait()
+            if p.returncode != 0:
+                print("`objcopy` is not available")
+                return False
 
-        p = Popen(["modprobe", '--version'], stdout=PIPE, stderr=STDOUT)
-        p.wait()
-        if p.returncode != 0:
-            print("`modprobe` is not available")
-            return False
+        with Popen(["modprobe", '--version'], stdout=PIPE, stderr=STDOUT) as p:
+            p.wait()
+            if p.returncode != 0:
+                print("`modprobe` is not available")
+                return False
 
         return True
 
@@ -152,12 +150,11 @@ class NanoBench:
             given file. Hence, a special code path is used.
         """
         if root:
-            pass  # TODO
-            return False
-        else:
-            with open(filename, 'w', encoding="utf-8") as f:
-                f.write(str(content))
-                return True
+            return False# TODO
+        
+        with open(filename, 'w', encoding="utf-8") as f:
+            f.write(str(content))
+            return True
 
     @staticmethod
     def read_file(filename: Union[str, Path],
@@ -169,11 +166,9 @@ class NanoBench:
         :return the content of the file as a string
         """
         if root:
-            pass  # TODO
-            return ""
-        else:
-            with open(filename) as f:
-                return f.read()
+            return "" # TODO
+        with open(filename, encoding="utf-8") as f:
+            return f.read()
 
     @staticmethod
     def run_command(cmds: List[str],
@@ -185,31 +180,30 @@ class NanoBench:
         :param cwd: current working dir 
         """
         if root:
-            # TODO different super user command
-            # use elevate oder so
+            # TODO use elevate oder so
             cmds = ["sudo"] + cmds
 
         if cwd == "":
-            cwd = os.path.dirname(os.path.realpath(__file__)) 
+            cwd = os.path.dirname(os.path.realpath(__file__))
 
         pprint.pprint(cmds)
-        p = Popen(cmds, stdin=PIPE, stdout=PIPE, stderr=STDOUT, cwd=cwd)
-        p.wait()
-        assert p.stdout
-        if p.returncode != 0:
-            print("command failed")
-            print(str(p.stdout.read()))
-            return False, []
+        with Popen(cmds, stdin=PIPE, stdout=PIPE, stderr=STDOUT, cwd=cwd) as p:
+            p.wait()
+            assert p.stdout
+            if p.returncode != 0:
+                print("command failed")
+                print(str(p.stdout.read()))
+                return False, []
 
-        s = p.stdout.readlines()
-        s = [str(a.decode().removesuffix("\n")) for a in s]
+            s = p.stdout.readlines()
+            s = [str(a.decode().removesuffix("\n")) for a in s]
 
-        # filter a few things
-        s = [a for a in s if not "Note:" in a]
-        return True, s
+            # filter a few things
+            s = [a for a in s if not "Note:" in a]
+            return True, s
 
     @staticmethod
-    def assemble(code: str, 
+    def assemble(code: str,
                  obj_file: str,
                  asm_file: str = '/tmp/ramdisk/asm.s'):
         """
@@ -240,8 +234,8 @@ class NanoBench:
                 code = code.replace('|1', 'nop;')
                 code = re.sub(r'(\d*)\*\|(.*?)\|', lambda m: int(m.group(1)) * (m.group(2) + ';'), code)
             code = '.intel_syntax noprefix;' + code + ';1:;.att_syntax prefix\n'
-            with open(asm_file, 'w') as f:
-                f.write(code);
+            with open(asm_file, 'w', encoding="utf-8") as f:
+                f.write(code)
             subprocess.check_call(['as', asm_file, '-o', obj_file])
             return True
         except subprocess.CalledProcessError as e:
@@ -297,7 +291,7 @@ class NanoBench:
         :return the size in bytes.
         """
         if not hasattr(NanoBench.getR14Size, 'r14Size'):
-            with open('/sys/nb/r14_size') as f:
+            with open('/sys/nb/r14_size', encoding="utf-8") as f:
                 line = f.readline()
                 mb = int(line.split()[2])
                 NanoBench.getR14Size.r14Size = mb * 1024 * 1024
@@ -325,8 +319,7 @@ class NanoBench:
         t = NanoBench.read_file("/sys/devices/system/cpu/smt/active", False)
         try:
             t = int(t)
-            t = t != 0
-            return t
+            return t != 0
         except Exception as e:
             print("cannot read the SMT state", e)
             return False
@@ -406,32 +399,54 @@ class NanoBench:
         cmd.append("-config")
         cmd.append(self._config)
 
-        if self._verbose: cmd += ["-verbose"]
+        if self._verbose:
+            cmd += ["-verbose"]
         # note supported by user
         # if self._remove_empty_events: cmd += "-remove_empty_events"
-        if self._no_mem: cmd += "-no_mem"
-        if self._range: cmd += "-range"
-        if self._max: cmd += "-max"
-        if self._min: cmd += "-min"
-        if self._median: cmd += "-median"
-        if self._avg: cmd += "-avg"
-        if self._alignment_offset: cmd += "-alignment_offset="+str(self._alignment_offset)
-        if self._initial_warm_up_count: cmd += "-initial_warm_up_count="+str(self._initial_warm_up_count)
-        if self._warm_up_count: cmd += "-warm_up_count="+str(self._warm_up_count)
-        if self._n_measurements: cmd += "-n_measurements="+str(self._n_measurements)
-        if self._loop_count: cmd += "-loop_count="+str(self._loop_count)
-        if self._unroll_count: cmd += "-unroll_count="+str(self._unroll_count)
-        if self._cpu != -1: cmd += "-cpu="+str(self._cpu)
-        if self._end_to_end: cmd += "-end_to_end"
-        if self._os: cmd += "-os"
-        if self._usr: cmd += "-usr"
-        if self._no_normalization: cmd += "-no_normalization"
-        if self._df: cmd += "-df"
-        if self._fixed_counters: cmd += "-fixed_counters"
-        if self._basic_mode: cmd += "-basic_mode"
+
+        if self._no_mem:
+            cmd += "-no_mem"
+        if self._range:
+            cmd += "-range"
+        if self._max:
+            cmd += "-max"
+        if self._min:
+            cmd += "-min"
+        if self._median:
+            cmd += "-median"
+        if self._avg:
+            cmd += "-avg"
+        if self._alignment_offset:
+            cmd += "-alignment_offset="+str(self._alignment_offset)
+        if self._initial_warm_up_count:
+            cmd += "-initial_warm_up_count="+str(self._initial_warm_up_count)
+        if self._warm_up_count:
+            cmd += "-warm_up_count="+str(self._warm_up_count)
+        if self._n_measurements:
+            cmd += "-n_measurements="+str(self._n_measurements)
+        if self._loop_count:
+            cmd += "-loop_count="+str(self._loop_count)
+        if self._unroll_count:
+            cmd += "-unroll_count="+str(self._unroll_count)
+        if self._cpu != -1:
+            cmd += "-cpu="+str(self._cpu)
+        if self._end_to_end:
+            cmd += "-end_to_end"
+        if self._os:
+            cmd += "-os"
+        if self._usr:
+            cmd += "-usr"
+        if self._no_normalization:
+            cmd += "-no_normalization"
+        if self._df:
+            cmd += "-df"
+        if self._fixed_counters:
+            cmd += "-fixed_counters"
+        if self._basic_mode:
+            cmd += "-basic_mode"
         b, s = NanoBench.run_command(cmd, root=True, cwd=cwd)
         if not b:
-            return False 
+            return False
 
         # TODO verbose and range do alter the output format
         data = NanoBench._parse_user_nanobench_output(s, self._remove_empty_events)
@@ -527,50 +542,52 @@ class NanoBench:
         """Do not try to remove overhead."""
         self._end_to_end = True
         return self
-    
+
     def usr(self) -> 'NanoBench':
         """If 1, counts events at a privilege level greater than 0. 
         NOTE: only for user
         """
         self._user = True
-        return self 
+        return self
 
     def os(self) -> 'NanoBench':
         """If 1, counts events at a privilege 0. 
         NOTE: only for user
         """
         self._os = True
-        return self 
+        return self
 
     def no_normalization(self) -> 'NanoBench':
         """The measurement results are not divided by the number of repetitions
         NOTE: only for user
         """
         self._no_normalization = True
-        return self 
+        return self
 
     def df(self) -> 'NanoBench':
         """Drains front-end buffers between executing code_late_init and code.
         NOTE: only for user
         """
         self._df = True
-        return self 
+        return self
 
     def fixed_counters(self) -> 'NanoBench':
         """Reads the fixed-function performance counters.
         NOTE: only for user
         """
         self._fixed_counters = True
-        return self 
+        return self
 
     def basic_mode(self) -> 'NanoBench':
         """enables basic mode
         NOTE: only for user
         """
         self._basic_mode = True
-        return self 
+        return self
+
 
 def main():
+    """ just for testing """
     n = NanoBench()
     s = "ADD RAX, RBX; ADD RBX, RAX"
     n.remove_empty_events().run(s)
@@ -578,4 +595,4 @@ def main():
 
 
 if __name__ == "__main__":
-   main()
+    main()

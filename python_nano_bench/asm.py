@@ -1,5 +1,7 @@
-#!/usr/bin/env python3 
+#!/usr/bin/env python3
 """
+assembly helper file, to check if a line of code has some properties, like:
+    - memory access
 """
 
 from typing import List
@@ -39,7 +41,7 @@ class Asm:
             t = Asm.__p.search(line)
             if t:
                 if len(free_registers) == 0:
-                    raise Exception("no free registers anymore")
+                    raise ValueError("no free registers anymore")
                 r = free_registers[0]
                 used_registers.append(r)
                 free_registers = free_registers[1:]

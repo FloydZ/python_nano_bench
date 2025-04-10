@@ -33,6 +33,7 @@ let
     pkg-config
 
     # dev
+    ruff
     jetbrains.pycharm-community
   ] ++ (lib.optionals pkgs.stdenv.isLinux ([
   ]));

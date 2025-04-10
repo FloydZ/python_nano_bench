@@ -9,4 +9,3 @@ __version__ = '.'.join(__version_info__)
 __maintainer__ = "Floyd Zweydinger"
 __email__ = "zweydfg8+github@rub.de"
 __status__ = "Development"
-
