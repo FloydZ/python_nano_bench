@@ -12,6 +12,7 @@ from typing import List, Tuple, Union
 
 from .asm import Asm
 from .cpuid.cpuid import CPUID, micro_arch
+from .elevate import Elevate
 
 PFC_START_ASM = '.quad 0xE0B513B1C2813F04'
 PFC_STOP_ASM = '.quad 0xF0B513B1C2813F04'
@@ -38,6 +39,8 @@ class NanoBench:
     }
 
     def __init__(self):
+        self._elevate = Elevate()
+
         # if set to true, all benchmarks will be performed using the kernel
         # mode.
         self.kernel_mode = False

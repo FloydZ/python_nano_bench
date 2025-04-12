@@ -7,6 +7,8 @@ tool.
 import errno
 import os
 import sys
+from typing import List, Tuple
+from subprocess import Popen, PIPE, STDOUT
 from shlex import quote
 
 
@@ -67,3 +69,28 @@ def elevate(_=True, graphical=True):
         except OSError as e:
             if e.errno != errno.ENOENT or args[0] == "sudo":
                 raise
+
+
+class Elevate:
+    """
+    this class spawns a additional shell with root rights, and then forwards
+    commands to this shell
+    """
+    def __init__(self) -> None:
+        pass
+
+    def run(self, cmds: List[str]) -> Tuple[int, str]:
+        """
+        TODO: einen process auslagern der die commands dann ausführt.
+
+        :params cmds: list of str which form the command to execute
+        :return returncode, stdout
+        """
+        elevate()
+
+        with Popen(cmds, stdout=PIPE, stderr=STDOUT, universal_newlines=True) as p:
+            p.wait()
+            assert p.returncode
+            assert p.stdout
+            return p.returncode, p.stdout.read()
+

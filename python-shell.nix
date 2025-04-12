@@ -40,6 +40,7 @@ let
         export PYTHONPATH=$PYTHONPATH:`pwd`/$VENV/${myPython.sitePackages}/
         ./build.sh
         pip install -e .
+        echo
     '';
   };
 in shell

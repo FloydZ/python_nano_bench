@@ -45,8 +45,8 @@ setup(
     version='0.0.1',
     author='Floyd Zweydinger',
     author_email='zweydfg8+github@rub.de',
-    description='TODO',
-    long_description="TODO",
+    description='Wrapper around NanoBench',
+    long_description="Python wrapper around NanoBench",
     project_urls={
         'Source Code': 'https://github.com/FloydZ/python_nano_bench',
         "Author's Website": 'https://pingfloyd.de',

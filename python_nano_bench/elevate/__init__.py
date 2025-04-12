@@ -10,6 +10,7 @@ if sys.platform.startswith("win"):
     from .windows import elevate as _elevate
 else:
     from .posix import elevate as _elevate
+    from .posix import Elevate
 
 
 def elevate(show_console=True, graphical=False):
@@ -31,6 +32,7 @@ def elevate(show_console=True, graphical=False):
 
 def run_as_root(cmd: List[str]):
     """
+    TODO imlement
     :param cmd:
     :return the return value of the command.
     """
