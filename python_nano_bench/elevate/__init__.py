@@ -30,13 +30,19 @@ def elevate(show_console=True, graphical=False):
     _elevate(show_console, graphical)
 
 
-def run_as_root(cmd: List[str]):
+def run_as_root(cmds: List[str]):
     """
-    TODO imlement
-    :param cmd:
+    :param cmds: a single command represented in a list of strings
     :return the return value of the command.
     """
-    pass
+    from subprocess import Popen, PIPE, STDOUT
+    elevate()
+    with Popen(cmds, stdout=PIPE, stderr=STDOUT, universal_newlines=True) as p:
+        p.wait()
+        assert p.returncode
+        assert p.stdout
+        return p.returncode, p.stdout.read()
+
 
 def is_root():
     """

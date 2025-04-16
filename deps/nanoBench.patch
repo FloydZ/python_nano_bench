@@ -1,0 +1,40 @@
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 6e70a90..47e6f65 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -1,6 +1,6 @@
+ MODULE_NAME = nb
+ 
+-BUILD_DIR = /lib/modules/$(shell uname -r)/build
++BUILD_DIR = ${KERNELPATH}/lib/modules/$(shell uname -r)/build
+ HEADERS_EXIST = $(shell if [ -d "${BUILD_DIR}" ]; then echo "${BUILD_DIR}"; \
+                   else echo ""; fi)
+ 
+@@ -15,12 +15,12 @@ $(MODULE_NAME)-objs += $(SRC:.c=.o)
+ 
+ obj-m += $(MODULE_NAME).o
+ 
+-ccflags-y+=-std=gnu99 -Wno-declaration-after-statement -Wno-vla -isystem $(shell $(CC) -print-file-name=include) -mfunction-return=keep
++ccflags-y+=-std=gnu99 -Wno-declaration-after-statement -Wno-vla -isystem $(shell $(CC) -print-file-name=include) -fcf-protection=branch -mindirect-branch-register -mharden-sls=all
+ 
+ OBJECT_FILES_NON_STANDARD := y
+ 
+ all:
+-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
++	make -C ${KERNELPATH}/lib/modules/$(shell uname -r)/build M=$(PWD) modules
+ 
+ clean:
+ 	rm -f ../common/*.o ../common/*.ur-safe ../common/*.dwo ../common/.nanoBench.*
+diff --git a/kernel/nb_km.c b/kernel/nb_km.c
+index da2e175..47ede98 100644
+--- a/kernel/nb_km.c
++++ b/kernel/nb_km.c
+@@ -1148,7 +1148,7 @@ static void __exit nb_exit(void) {
+     vfree(runtime_rsp - RUNTIME_R_SIZE/2);
+ 
+     if (runtime_code_base) {
+-        set_memory_nx((unsigned long)runtime_code_base, runtime_code_base_memory_size/PAGE_SIZE);
++        // set_memory_nx((unsigned long)runtime_code_base, runtime_code_base_memory_size/PAGE_SIZE);
+         kfree(runtime_code_base);
+     }
+ 

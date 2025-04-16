@@ -12,7 +12,7 @@ from typing import List, Tuple, Union
 
 from .asm import Asm
 from .cpuid.cpuid import CPUID, micro_arch
-from .elevate import Elevate
+from .elevate import Elevate, elevate
 
 PFC_START_ASM = '.quad 0xE0B513B1C2813F04'
 PFC_STOP_ASM = '.quad 0xF0B513B1C2813F04'
@@ -153,8 +153,7 @@ class NanoBench:
             given file. Hence, a special code path is used.
         """
         if root:
-            return False# TODO
-        
+            elevate()
         with open(filename, 'w', encoding="utf-8") as f:
             f.write(str(content))
             return True
@@ -169,7 +168,7 @@ class NanoBench:
         :return the content of the file as a string
         """
         if root:
-            return "" # TODO
+            elevate()
         with open(filename, encoding="utf-8") as f:
             return f.read()
 
@@ -183,8 +182,7 @@ class NanoBench:
         :param cwd: current working dir 
         """
         if root:
-            # TODO use elevate oder so
-            cmds = ["sudo"] + cmds
+            elevate()
 
         if cwd == "":
             cwd = os.path.dirname(os.path.realpath(__file__))
@@ -352,36 +350,44 @@ class NanoBench:
     def prefix(self) -> bool:
         """
         TODO describe
+        :return 
         """
         # TODO check if atom/core
         self.prev_rdpmc = NanoBench.read_file(filename="/sys/bus/event_source/devices/cpu", root=True)
-        NanoBench.write_file(filename="/sys/bus/event_source/devices/cpu", content="2", root=True)
+        NanoBench.write_file(filename="/sys/bus/event_source/devices/cpu", 
+                             content="2", root=True)
 
-        NanoBench.run_command(["modprobe", "--first-time" 'msr'], True)
+        NanoBench.run_command(["modprobe", "--first-time" 'msr'], root=True)
 
         # (Temporarily) disable watchdogs, see https://github.com/obilaniu/libpfc
-        NanoBench.run_command(["modprobe", "--first-time", "-r", "iTCO_wdt"], True)
-        NanoBench.run_command(["modprobe", "--first-time", "-r", "iTCO_vendor_support"], True)
+        NanoBench.run_command(["modprobe", "--first-time", "-r", "iTCO_wdt"], 
+                              root=True)
+        NanoBench.run_command(["modprobe", "--first-time", "-r", "iTCO_vendor_support"], 
+                              root=True)
 
-        self.prev_nmi_watchdog = NanoBench.read_file(filename="/proc/sys/kernel/nmi_watchdog", root=True)
-        NanoBench.write_file(filename="/proc/sys/kernel/nmi_watchdog", content="0", root=True)
+        self.prev_nmi_watchdog = NanoBench.read_file(filename="/proc/sys/kernel/nmi_watchdog", 
+                                                     root=True)
+        NanoBench.write_file(filename="/proc/sys/kernel/nmi_watchdog", 
+                             content="0", root=True)
         return True
 
     def postfix(self):
         """
         TODO describe
+        :return 
         """
         if self.prev_nmi_watchdog != 0:
-            NanoBench.write_file(filename="/proc/sys/kernel/nmi_watchdog", content=self.prev_nmi_watchdog, root=True)
+            NanoBench.write_file(filename="/proc/sys/kernel/nmi_watchdog", 
+                                 content=self.prev_nmi_watchdog, root=True)
 
-        NanoBench.write_file(filename="/sys/bus/event_source/devices/cpu", content=self.prev_rdpmc, root=True)
+        NanoBench.write_file(filename="/sys/bus/event_source/devices/cpu", 
+                             content=self.prev_rdpmc, root=True)
         return True
 
-    def run(self, asm: str) -> bool:
+    def run(self, asm: str, kernel: bool=False) -> bool:
         """
-        TODO describe
-        :param asm:
-
+        :param asm: valid assembly string
+        :return 
         """
         sasm = asm.split(";")
         sasm, init_asm = Asm.parse(sasm)
@@ -405,7 +411,8 @@ class NanoBench:
         if self._verbose:
             cmd += ["-verbose"]
         # note supported by user
-        # if self._remove_empty_events: cmd += "-remove_empty_events"
+        if kernel:
+            if self._remove_empty_events: cmd += "-remove_empty_events"
 
         if self._no_mem:
             cmd += "-no_mem"
@@ -447,11 +454,12 @@ class NanoBench:
             cmd += "-fixed_counters"
         if self._basic_mode:
             cmd += "-basic_mode"
+
         b, s = NanoBench.run_command(cmd, root=True, cwd=cwd)
         if not b:
             return False
 
-        # TODO verbose and range do alter the output format
+        # TODO the verbose and range flag do alter the output format,
         data = NanoBench._parse_user_nanobench_output(s, self._remove_empty_events)
         pprint.pprint(data)
         return True
