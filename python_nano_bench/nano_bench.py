@@ -22,8 +22,6 @@ class NanoBench:
     """
     wrapper around ./nanoBench
     """
-
-
     __micro_arch =  ['SNB', 'IVB', 'HSW', 'BDW', 'SKL', 'SKX', 'CLX', 'KBL',
                      'CFL', 'CNL', 'ADL-P', 'ADL-E']
     march_translation = {
@@ -218,22 +216,34 @@ class NanoBench:
         """
         try:
             if '|' in code:
-                code = code.replace('|15', '.byte 0x66,0x66,0x66,0x66,0x66,0x66,0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
-                code = code.replace('|14', '.byte 0x66,0x66,0x66,0x66,0x66,0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
-                code = code.replace('|13', '.byte 0x66,0x66,0x66,0x66,0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
-                code = code.replace('|12', '.byte 0x66,0x66,0x66,0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
-                code = code.replace('|11', '.byte 0x66,0x66,0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
-                code = code.replace('|10', '.byte 0x66,0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
-                code = code.replace('|9', '.byte 0x66,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
-                code = code.replace('|8', '.byte 0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
-                code = code.replace('|7', '.byte 0x0f,0x1f,0x80,0x00,0x00,0x00,0x00;')
-                code = code.replace('|6', '.byte 0x66,0x0f,0x1f,0x44,0x00,0x00;')
+                code = code.replace('|15', '.byte 0x66,0x66,0x66,0x66,0x66,'
+                    '0x66,0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
+                code = code.replace('|14', '.byte 0x66,0x66,0x66,0x66,0x66,'
+                    '0x2e,0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
+                code = code.replace('|13', '.byte 0x66,0x66,0x66,0x66,0x2e,'
+                    '0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
+                code = code.replace('|12', '.byte 0x66,0x66,0x66,0x2e,0x0f,'
+                    '0x1f,0x84,0x00,0x00,0x00,0x00,0x00;')
+                code = code.replace('|11', '.byte 0x66,0x66,0x2e,0x0f,0x1f,'
+                    '0x84,0x00,0x00,0x00,0x00,0x00;')
+                code = code.replace('|10', '.byte 0x66,0x2e,0x0f,0x1f,0x84,'
+                    '0x00,0x00,0x00,0x00,0x00;')
+                code = code.replace('|9', '.byte 0x66,0x0f,0x1f,0x84,0x00,'
+                    '0x00,0x00,0x00,0x00;')
+                code = code.replace('|8', '.byte 0x0f,0x1f,0x84,0x00,0x00,'
+                    '0x00,0x00,0x00;')
+                code = code.replace('|7', '.byte 0x0f,0x1f,0x80,0x00,0x00,'
+                    '0x00,0x00;')
+                code = code.replace('|6', '.byte 0x66,0x0f,0x1f,0x44,0x00,'
+                    '0x00;')
                 code = code.replace('|5', '.byte 0x0f,0x1f,0x44,0x00,0x00;')
                 code = code.replace('|4', '.byte 0x0f,0x1f,0x40,0x00;')
                 code = code.replace('|3', '.byte 0x0f,0x1f,0x00;')
                 code = code.replace('|2', '.byte 0x66,0x90;')
                 code = code.replace('|1', 'nop;')
-                code = re.sub(r'(\d*)\*\|(.*?)\|', lambda m: int(m.group(1)) * (m.group(2) + ';'), code)
+                code = re.sub(r'(\d*)\*\|(.*?)\|',
+                    lambda m: int(m.group(1)) * (m.group(2) + ';'), code)
+
             code = '.intel_syntax noprefix;' + code + ';1:;.att_syntax prefix\n'
             with open(asm_file, 'w', encoding="utf-8") as f:
                 f.write(code)
@@ -246,7 +256,7 @@ class NanoBench:
 
     @staticmethod
     def objcopy(source_file: str,
-                target_file: str):
+                target_file: str) -> bool:
         """
         copy the code/text section from `source_file` to `target_file`
 
@@ -256,7 +266,8 @@ class NanoBench:
 
         """
         try:
-            subprocess.check_call(['objcopy', "-j", ".text", '-O', 'binary', source_file, target_file])
+            subprocess.check_call(['objcopy', "-j", ".text", '-O', 'binary',
+                                   source_file, target_file])
             return True
         except subprocess.CalledProcessError as e:
             sys.stderr.write("Error (objcopy): " + str(e))
@@ -299,7 +310,7 @@ class NanoBench:
         return NanoBench.getR14Size.r14Size
 
     @staticmethod
-    def getAddress(reg):
+    def getAddress(reg) -> str:
         """ Returns the address that is stored in R14, RDI, RSI, RBP, or RSP 
         as a hex string.
         NOTE: only available if the kernel module is loaded
@@ -353,21 +364,22 @@ class NanoBench:
         :return 
         """
         # TODO check if atom/core
-        self.prev_rdpmc = NanoBench.read_file(filename="/sys/bus/event_source/devices/cpu", root=True)
-        NanoBench.write_file(filename="/sys/bus/event_source/devices/cpu", 
+        self.prev_rdpmc = NanoBench.read_file(
+            filename="/sys/bus/event_source/devices/cpu", root=True)
+        NanoBench.write_file(filename="/sys/bus/event_source/devices/cpu",
                              content="2", root=True)
 
         NanoBench.run_command(["modprobe", "--first-time" 'msr'], root=True)
 
         # (Temporarily) disable watchdogs, see https://github.com/obilaniu/libpfc
-        NanoBench.run_command(["modprobe", "--first-time", "-r", "iTCO_wdt"], 
+        NanoBench.run_command(["modprobe", "--first-time", "-r", "iTCO_wdt"],
                               root=True)
-        NanoBench.run_command(["modprobe", "--first-time", "-r", "iTCO_vendor_support"], 
-                              root=True)
+        NanoBench.run_command(["modprobe", "--first-time", "-r",
+                               "iTCO_vendor_support"],  root=True)
 
-        self.prev_nmi_watchdog = NanoBench.read_file(filename="/proc/sys/kernel/nmi_watchdog", 
-                                                     root=True)
-        NanoBench.write_file(filename="/proc/sys/kernel/nmi_watchdog", 
+        self.prev_nmi_watchdog = NanoBench.read_file(
+            filename="/proc/sys/kernel/nmi_watchdog", root=True)
+        NanoBench.write_file(filename="/proc/sys/kernel/nmi_watchdog",
                              content="0", root=True)
         return True
 
@@ -377,10 +389,10 @@ class NanoBench:
         :return 
         """
         if self.prev_nmi_watchdog != 0:
-            NanoBench.write_file(filename="/proc/sys/kernel/nmi_watchdog", 
+            NanoBench.write_file(filename="/proc/sys/kernel/nmi_watchdog",
                                  content=self.prev_nmi_watchdog, root=True)
 
-        NanoBench.write_file(filename="/sys/bus/event_source/devices/cpu", 
+        NanoBench.write_file(filename="/sys/bus/event_source/devices/cpu",
                              content=self.prev_rdpmc, root=True)
         return True
 

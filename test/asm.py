@@ -3,7 +3,7 @@
 tests the assembly helper file
 """
 
-from python_nano_bench.asm import Asm 
+from python_nano_bench.asm import Asm
 
 def test_simple():
     """

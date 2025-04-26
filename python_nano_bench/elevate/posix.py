@@ -93,4 +93,3 @@ class Elevate:
             assert p.returncode
             assert p.stdout
             return p.returncode, p.stdout.read()
-

@@ -1,24 +1,32 @@
 #!/usr/bin/env python3
-from python_nano_bench.nano_bench import NanoBench 
+"""
+tests chcking the main pythn interface
+"""
+
+from python_nano_bench.nano_bench import NanoBench
+
 
 def test_simple():
     """
     if this test fails, something really strange is off 
     """
-    t = "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymmword ptr [rip + .LCPI0_0]; vpblendvb ymm0, ymm1, ymm0, ymm1;"
+    t = "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymmword ptr" \
+        "[rip + .LCPI0_0]; vpblendvb ymm0, ymm1, ymm0, ymm1;"
     n = NanoBench()
     d = n.remove_empty_events().run(t)
     assert d
-    
+
     t2 = "ADD RAX, RBX; ADD RBX, RAX"
     d = n.remove_empty_events().run(t2)
     assert d
 
 
 def test_flags():
-    ts = [ 
+    """ tests all possible flags """
+    ts = [
         "ADD RAX, RBX; ADD RBX, RAX",
-        "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymmword ptr [rax]; vpblendvb ymm0, ymm1, ymm0, ymm1;"
+        "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymmword ptr [rax];"\
+        "vpblendvb ymm0, ymm1, ymm0, ymm1;"
     ]
 
     n = NanoBench()
@@ -67,5 +75,5 @@ def test_flags():
 
 
 if __name__ == "__main__":
-    #test_simple()
+    test_simple()
     test_flags()
