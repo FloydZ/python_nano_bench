@@ -18,6 +18,10 @@ PFC_START_ASM = '.quad 0xE0B513B1C2813F04'
 PFC_STOP_ASM = '.quad 0xF0B513B1C2813F04'
 
 
+from opcodes.x86 import read_instruction_set
+instruction_set = read_instruction_set()
+
+
 class NanoBench:
     """
     wrapper around ./nanoBench
@@ -614,7 +618,6 @@ def main():
     n = NanoBench()
     s = "ADD RAX, RBX; ADD RBX, RAX"
     n.remove_empty_events().run(s)
-
 
 
 if __name__ == "__main__":
