@@ -20,6 +20,25 @@ def test_simple():
     d = n.remove_empty_events().run(t2)
     assert d
 
+def test_loop():
+    """
+    """
+    t = """loop:
+    add rax, [rsi];
+    adc rax, [rsi+rbx];
+    shld rcx, rcx, 1;
+    shld rcx, rdx, 2;
+    dec r15;
+    jnz loop;"""
+    n = NanoBench()
+    d = n.remove_empty_events().run(t)
+    assert d
+
+    t2 = "ADD RAX, RBX; ADD RBX, RAX"
+    d = n.remove_empty_events().run(t2)
+    assert d
+
+
 
 def test_flags():
     """ tests all possible flags """
