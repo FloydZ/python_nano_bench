@@ -6,12 +6,14 @@ tool.
 """
 
 import errno
+import json
 import os
 import sys
-import threading
 from multiprocessing.connection import Client
-from typing import List, Tuple
+from typing import List
 from shlex import quote
+
+from python_nano_bench.elevate.secrets import ADDRESS, AUTHKEY
 
 
 def quote_shell(args):
@@ -72,55 +74,22 @@ def elevate(_=True, graphical=False):
             if e.errno != errno.ENOENT or args[0] == "sudo":
                 raise
 
+#TODO remove
+class Elevate():
+    pass
 
-def worker_send_command_blocking(cmd_queue, response_dict, commands):
-    print( os.getuid())
-    tid = threading.get_native_id()
-    done_event = threading.Event()
-    print(f"[Worker {tid}] Sending command to root executor...")
-    cmd_queue.put((tid, commands, done_event))
-    done_event.wait()
-    stdout, stderr = response_dict.pop(tid)
-    print(f"[Worker {tid}] Output:\n{stdout}")
-    if stderr:
-        print(f"[Worker {tid}] Error:\n{stderr}")
-
-
-
-ADDRESS = ('localhost', 6000)
-AUTHKEY = b'secret'
-
-def main():
+def worker_send_command_blocking(cmd: List[str]):
     conn = Client(ADDRESS, authkey=AUTHKEY)
     print("[Client] Connected to server.")
-
-    messages = ["hello", "status", "exit"]
-    for msg in messages:
-        print(f"[Client] Sending: {msg}")
-        conn.send(msg)
-        reply = conn.recv()
-        print(f"[Client] Server replied: {reply}")
-
+    msg = json.dumps(cmd)
+    print(f"[Client] send: {msg}.")
+    conn.send(msg)
+    reply = conn.recv()
+    print(f"[Client] recv: {reply}.")
     conn.close()
+    print(f"[Client] closed")
+    return reply
+
 
 if __name__ == '__main__':
-    main()
-#if __name__ == "__main__":
-#    print( os.getuid())
-#    cmd_queue = queue.Queue()
-#    response_dict = {}
-#    root_executor = RootCommandExecutor(cmd_queue, response_dict)
-#    root_executor.start()
-#
-#    # Simulate worker threads sending blocking commands
-#    threading.Thread(target=worker_send_command_blocking, args=(cmd_queue, response_dict, ["ls", "/"])).start()
-#    threading.Thread(target=worker_send_command_blocking, args=(cmd_queue, response_dict, ["whoami"])).start()
-#
-#    try:
-#        while True:
-#            time.sleep(1)
-#    except KeyboardInterrupt:
-#        print("\n[Main] Stopping root executor...")
-#        root_executor.stop()
-#        root_executor.join()
-#        print("[Main] Shutdown complete.")
+    pass

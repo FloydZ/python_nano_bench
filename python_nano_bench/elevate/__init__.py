@@ -51,8 +51,8 @@ def is_root():
     return os.getuid() == 0
 
 
-if __name__ == '__main__':
-    # just a few tests
-    print("before ", is_root())
-    elevate()
-    print("after ", is_root())
+#if __name__ == '__main__':
+#    # just a few tests
+#    print("before ", is_root())
+#    elevate()
+#    print("after ", is_root())

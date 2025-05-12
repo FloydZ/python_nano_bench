@@ -11,5 +11,5 @@ __maintainer__ = "Floyd Zweydinger"
 __email__ = "zweydfg8+github@rub.de"
 __status__ = "Development"
 
-import cpuid
-import elevate
+from .cpuid import *
+from .elevate import *
