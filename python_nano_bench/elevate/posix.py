@@ -7,8 +7,9 @@ tool.
 import errno
 import os
 import sys
+import threading
+from multiprocessing.connection import Client
 from typing import List, Tuple
-from subprocess import Popen, PIPE, STDOUT
 from shlex import quote
 
 
@@ -35,7 +36,7 @@ def quote_applescript(string):
     return '"%s"' % "".join(charmap.get(char, char) for char in string)
 
 
-def elevate(_=True, graphical=True):
+def elevate(_=True, graphical=False):
     """
     :param graphical:
     :return
@@ -71,25 +72,54 @@ def elevate(_=True, graphical=True):
                 raise
 
 
-class Elevate:
-    """
-    this class spawns a additional shell with root rights, and then forwards
-    commands to this shell
-    """
-    def __init__(self) -> None:
-        pass
+def worker_send_command_blocking(cmd_queue, response_dict, commands):
+    print( os.getuid())
+    tid = threading.get_native_id()
+    done_event = threading.Event()
+    print(f"[Worker {tid}] Sending command to root executor...")
+    cmd_queue.put((tid, commands, done_event))
+    done_event.wait()
+    stdout, stderr = response_dict.pop(tid)
+    print(f"[Worker {tid}] Output:\n{stdout}")
+    if stderr:
+        print(f"[Worker {tid}] Error:\n{stderr}")
 
-    def run(self, cmds: List[str]) -> Tuple[int, str]:
-        """
-        TODO: einen process auslagern der die commands dann ausführt.
 
-        :params cmds: list of str which form the command to execute
-        :return returncode, stdout
-        """
-        elevate()
 
-        with Popen(cmds, stdout=PIPE, stderr=STDOUT, universal_newlines=True) as p:
-            p.wait()
-            assert p.returncode
-            assert p.stdout
-            return p.returncode, p.stdout.read()
+ADDRESS = ('localhost', 6000)
+AUTHKEY = b'secret'
+
+def main():
+    conn = Client(ADDRESS, authkey=AUTHKEY)
+    print("[Client] Connected to server.")
+
+    messages = ["hello", "status", "exit"]
+    for msg in messages:
+        print(f"[Client] Sending: {msg}")
+        conn.send(msg)
+        reply = conn.recv()
+        print(f"[Client] Server replied: {reply}")
+
+    conn.close()
+
+if __name__ == '__main__':
+    main()
+#if __name__ == "__main__":
+#    print( os.getuid())
+#    cmd_queue = queue.Queue()
+#    response_dict = {}
+#    root_executor = RootCommandExecutor(cmd_queue, response_dict)
+#    root_executor.start()
+#
+#    # Simulate worker threads sending blocking commands
+#    threading.Thread(target=worker_send_command_blocking, args=(cmd_queue, response_dict, ["ls", "/"])).start()
+#    threading.Thread(target=worker_send_command_blocking, args=(cmd_queue, response_dict, ["whoami"])).start()
+#
+#    try:
+#        while True:
+#            time.sleep(1)
+#    except KeyboardInterrupt:
+#        print("\n[Main] Stopping root executor...")
+#        root_executor.stop()
+#        root_executor.join()
+#        print("[Main] Shutdown complete.")

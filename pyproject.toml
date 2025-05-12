@@ -12,6 +12,9 @@ authors = [
 
 dependencies = []
 
+[tool.setuptools.packages.find]
+where = ["python_nano_bench"]
+
 [project.urls]
 "Homepage" = "https://github.com/FloydZ/python_nano_bench"
 "Repository" = "https://github.com/FloydZ/python_nano_bench"
