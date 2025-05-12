@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 linux/darwin/posix wrapper around sudo/gksudo,... or any privileges escalation
 tool.

@@ -8,7 +8,7 @@ import os
 import queue
 from subprocess import Popen, PIPE, STDOUT
 
-from . import posix
+from python_nano_bench.elevate.posix import elevate
 
 ADDRESS = ('localhost', 6000)
 AUTHKEY = b'secret'
@@ -58,7 +58,7 @@ class RootCommandExecutor(threading.Thread):
 
 
 def main():
-    posix.elevate()
+    elevate()
     listener = Listener(ADDRESS, authkey=AUTHKEY)
     print(f"[Server] Listening on {ADDRESS}...")
 

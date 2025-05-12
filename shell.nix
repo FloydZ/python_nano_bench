@@ -74,11 +74,11 @@ let
         fi
         source ./$VENV/bin/activate
         export PYTHONPATH=$PYTHONPATH:`pwd`/$VENV/${myPython.sitePackages}/
-        ./build.sh
-        pip install -e .
         echo ${linuxPackages.kernel}
         export KERNELPATH=${linuxPackages.kernel.dev}
         export KERNELHEADERS=${linuxHeaders}
+        ./build.sh
+        pip install -e .
     '';
   };
 in shell
