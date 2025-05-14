@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python_nano_bench"
+version = "0.1.0"
+description = "Control all Build Systems"
+readme = "README.md"
+requires-python = ">=3.8"
+license-files = ["LICENSE"]
+
+authors = [
+  { name = "FloydZ", email = "floyd.zweydinger+github@rub.de" }
+]
+
+keywords = [
+    "benchmark",
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Development Status :: 4 - Beta"
+]
+
+dependencies = [
+    "pytest",
+    "pylint",
+    "Opcodes",
+]
+
+[project.urls]
+"Repository" = "https://github.com/FloydZ/python_nano_bench"
+
+[project.scripts]
+sample = "sample:main"
+
+[tool.setuptools]
+include-package-data = true 
+package-data = { "python_nano_bench" = ["./deps/"] }
+[packages.find]
+where = ["src"]
+include = ["deps", "src"]
+exclude = ["tests"]
+

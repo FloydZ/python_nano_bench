@@ -1,38 +1,84 @@
-with (import <nixpkgs> {});
-let
-  mach-nix = import (builtins.fetchGit {
-    url = "https://github.com/DavHau/mach-nix";
-    ref = "refs/tags/3.5.0";
-  }) {};
-  pyEnv = mach-nix.mkPython rec {
-    providers._default = "wheel,conda,nixpkgs,sdist";
-    requirements = builtins.readFile ./requirements.txt;
-  };
-in
-
-mach-nix.nixpkgs.mkShell {
-  buildInputs = [
-    # nanoBench build deps
-    gnumake
-    gcc
-    
-    # python deps
+with import <nixpkgs> { };
+{ pkgs ? import <nixpkgs> { } }:
+let 
+  myPython = pkgs.python311;
+  pythonPackages = pkgs.python311Packages;
+  pythonWithPkgs = myPython.withPackages (pythonPkgs: with pythonPkgs; [
+    ipython
+    pip
+    setuptools
     virtualenv
-    pyEnv
-  ];
-  venvDir = "venv3";
-  shellHook = ''
-    virtualenv --no-setuptools venv
-    export PIP_PREFIX=$(pwd)/_build/pip_packages
-    export PATH=$PWD/venv/bin:$PATH
-    export PYTHONPATH=venv/lib/python3/site-packages/:$PYTHONPATH
-    export PYTHONPATH="$PIP_PREFIX/${pkgs.python3.sitePackages}:$PYTHONPATH"
-    export PATH="$PIP_PREFIX/bin:$PATH"
-    unset SOURCE_DATE_EPOCH
-    sh build.sh
-  '';
+    wheel
+  ]);
 
-   postShellHook = ''
-     ln -sf ${pyEnv}/lib/python3/site-packages/* ./venv/lib/python3/site-packages
-  '';
-}
+  # add the needed packages here
+  extraBuildInputs = with pkgs; [
+    myPython
+    pythonPackages.numpy
+    pythonPackages.pytest
+    pythonPackages.pylint
+    pythonPackages.pycparser
+    pythonPackages.sphinx
+
+    # needed for running tests
+    gcc
+    clang 
+    gnumake
+    cmake
+
+    # needed for nanoBench
+    autoconf
+    automake
+    libtool
+    pkg-config
+    linuxHeaders
+    linuxPackages.kernel
+
+    # dev
+    ruff
+    jetbrains.pycharm-community
+  ] ++ (lib.optionals pkgs.stdenv.isLinux ([
+    ]));
+
+  buildInputs  = with pkgs; [
+      clang
+      llvmPackages.bintools
+      rustup
+  ] ++ extraBuildInputs;
+
+  lib-path = with pkgs; lib.makeLibraryPath buildInputs;
+  shell = pkgs.mkShell {
+    buildInputs = [
+       # my python and packages
+        pythonWithPkgs
+        
+        # other packages needed for compiling python libs
+        pkgs.readline
+        pkgs.libffi
+        pkgs.openssl
+  
+        # unfortunately needed because of messing with LD_LIBRARY_PATH below
+        pkgs.git
+        pkgs.openssh
+        pkgs.rsync
+    ] ++ extraBuildInputs;
+    shellHook = ''
+        # Allow the use of wheels.
+        SOURCE_DATE_EPOCH=$(date +%s)
+        # Augment the dynamic linker path
+        export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${lib-path}"
+        # Setup the virtual environment if it doesn't already exist.
+        VENV=.venv
+        if test ! -d $VENV; then
+          virtualenv $VENV
+        fi
+        source ./$VENV/bin/activate
+        export PYTHONPATH=$PYTHONPATH:`pwd`/$VENV/${myPython.sitePackages}/
+        echo ${linuxPackages.kernel}
+        export KERNELPATH=${linuxPackages.kernel.dev}
+        export KERNELHEADERS=${linuxHeaders}
+        ./build.sh
+        pip install -e .
+    '';
+  };
+in shell
