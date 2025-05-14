@@ -10,7 +10,11 @@ authors = [
   { name = "FloydZ", email = "floyd.zweydinger+github@rub.de" }
 ]
 
-dependencies = []
+dependencies = [
+    pytest 
+    pylint
+    Opcodes
+]
 
 [tool.setuptools.packages.find]
 where = ["python_nano_bench"]

@@ -1,3 +1,3 @@
 [submodule "deps/nanoBench"]
-	path = deps/nanoBench
+	path = src/python_nano_bench/deps/nanoBench
 	url = https://github.com/andreas-abel/nanoBench
