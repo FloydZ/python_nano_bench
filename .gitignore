@@ -3,3 +3,4 @@
 .pytest_cache/
 *python_nano_bench.egg-info/
 *__pycache__/
+build/
