@@ -27,6 +27,7 @@ dependencies = [
     "pytest",
     "pylint",
     "Opcodes",
+    "lark",
 ]
 
 [project.urls]
