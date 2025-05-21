@@ -9,9 +9,8 @@ cd deps/nanoBench/
 # apply patch
 git apply < ../nanoBench.patch
 
-cd user
 make 
-cd ../../..
+cd ../..
 
 # cd back into main directory
 cd ../..

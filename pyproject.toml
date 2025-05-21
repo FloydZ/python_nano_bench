@@ -43,4 +43,3 @@ package-data = { "python_nano_bench" = ["./deps/"] }
 where = ["src"]
 include = ["deps", "src"]
 exclude = ["tests"]
-
