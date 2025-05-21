@@ -3,9 +3,14 @@
 # cd into main project directory
 cd src/python_nano_bench
 
-cd deps/nanoBench/user
+# cd into the current deps folder 
+cd deps/nanoBench/
+
+# apply patch
+git apply < ../nanoBench.patch
+
 make 
-cd ../../..
+cd ../..
 
 # cd back into main directory
 cd ../..
