@@ -11,6 +11,13 @@ let
     wheel
   ]);
 
+  #cllvm = llvmPackages.llvm.overrideAttrs (oldAttrs: rec {
+  #  cmakeFlags = oldAttrs.cmakeFlags ++ [
+  #    "-DLLVM_ENABLE_LIBPFM"
+  #  ];
+  #  doCheck = false;
+  #});
+
   # add the needed packages here
   extraBuildInputs = with pkgs; [
     myPython
@@ -25,6 +32,9 @@ let
     clang 
     gnumake
     cmake
+    #cllvm
+    llvm
+    libpfm
 
     # needed for nanoBench
     autoconf

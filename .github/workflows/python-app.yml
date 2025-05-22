@@ -35,4 +35,4 @@ jobs:
 
     - name: Test with pytest
       run: |
-        pytest
+        pytest src/python_nano_bench/test/*.py

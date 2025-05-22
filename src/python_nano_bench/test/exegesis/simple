@@ -1,0 +1,5 @@
+# LLVM-EXEGESIS-LIVEIN RDI
+# LLVM-EXEGESIS-DEFREG XMM1 42
+vmulps        (%rdi), %xmm1, %xmm2
+vhaddps       %xmm2, %xmm2, %xmm3
+addq $0x10, %rdi
