@@ -23,9 +23,9 @@ class Asm:
         """
         ret = ""
         for i, r in enumerate(used_registers):
-            # "MOV RAX, R14; SUB RAX, 8; MOV [RAX], RAX"
+            # "MOV RAX, R14; SUB RAX, 8;"
             d = 8 * (i + 1)
-            ret += f"mov {r}, r14; sub {r}, {d}; mov [{r}], {r};"
+            ret += f"mov {r}, r14; sub {r}, {d};"
         return ret
 
     @staticmethod

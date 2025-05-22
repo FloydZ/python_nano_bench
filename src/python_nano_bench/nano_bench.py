@@ -21,6 +21,7 @@ PFC_STOP_ASM = '.quad 0xF0B513B1C2813F04'
 from opcodes.x86 import read_instruction_set
 instruction_set = read_instruction_set()
 
+from python_nano_bench.constraints import parse_constrains
 
 class NanoBench:
     """
@@ -40,14 +41,24 @@ class NanoBench:
         'SKX' : 'SkylakeX',
     }
 
-    def __init__(self):
+    def __init__(self, ignore_self_parsed_init=False):
+        """
+        :param ignore_self_parsed_init: If true the class will ignore register initialization code itself detected
+        while parsing the assembly. For example while parsing:
+            "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymmword ptr [rax];"
+        this class will detect that `rax` is a memory dependency, hence will make sure that 'rax' points to valid mem.
+        But sometimes this is undesired behaviour.
+        """
         self._elevate = Elevate()
 
         # if set to true, all benchmarks will be performed using the kernel
         # mode.
         self.kernel_mode = False
 
-        # nanoBennch kernel and user params
+        # self configs
+        self._ignore_self_parsed_init = ignore_self_parsed_init
+
+        # nanoBench kernel and user params
         self._verbose = False
         self._remove_empty_events = False
         self._no_mem = False
@@ -71,13 +82,13 @@ class NanoBench:
         self._fixed_counters = False
         self._basic_mode = False
 
-        # files
+        # string
         self._code_one_time_init = False
         self._code_late_init = False
         self._code_init = False
         self._asm_one_time_init = False
         self._asm_late_init = False
-        self._asm_init = False
+        self._asm_init = ""
 
         # this refers to the `config file` which is used to determine which
         # performance metrics is supported by the cpu
@@ -97,7 +108,11 @@ class NanoBench:
         :return the path to the configuration file containing all performance 
             metrics supported by the local cpu.
         """
-        march = NanoBench.march_translation[march]
+        try:
+            march = NanoBench.march_translation[march]
+        except:
+            print("ERROR could not find you arch, fall back to Zen")
+            march = "Zen"
         return f"./configs/cfg_{march}_all.txt"
         #return f"deps/nanoBench/configs/cfg_{march}_all_core.txt"
 
@@ -178,7 +193,7 @@ class NanoBench:
     def run_command(cmds: List[str],
                     root: bool,
                     cwd: str="") -> Tuple[bool, List[str]]:
-        """
+        """ helper function, just running a sommand
         :param cmds: list of strings which is a single command
         :param root: if true the command will be executed as root 
         :param cwd: current working dir 
@@ -403,21 +418,19 @@ class NanoBench:
     def run(self, asm: str, kernel: bool=False) -> bool:
         """
         :param asm: valid assembly string
+        :param kernel: t
         :return 
         """
         sasm = asm.split(";")
         sasm, init_asm = Asm.parse(sasm)
         sasm = "; ".join(sasm)
 
-        cwd = "./deps/nanoBench/"
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        cwd = dir_path + "/deps/nanoBench/"
         cmd = ["bash"]
         cmd.append("nanoBench.sh")
         cmd.append("-asm")
         cmd.append(sasm)
-
-        if len(init_asm) > 0:
-            cmd.append("-asm_init")
-            cmd.append(init_asm)
 
         # add config file
         assert self._config
@@ -431,15 +444,15 @@ class NanoBench:
             if self._remove_empty_events: cmd += "-remove_empty_events"
 
         if self._no_mem:
-            cmd += "-no_mem"
+            cmd += ["-no_mem"]
         if self._range:
-            cmd += "-range"
+            cmd += ["-range"]
         if self._max:
-            cmd += "-max"
+            cmd += ["-max"]
         if self._min:
-            cmd += "-min"
+            cmd += ["-min"]
         if self._median:
-            cmd += "-median"
+            cmd += ["-median"]
         if self._avg:
             cmd += "-avg"
         if self._alignment_offset:
@@ -471,7 +484,17 @@ class NanoBench:
         if self._basic_mode:
             cmd += "-basic_mode"
 
+        # strings
+        if len(self._asm_init):
+            t = "-asm_init=\""
+            if len(init_asm) > 0 and not self._ignore_self_parsed_init:
+                t +=init_asm
+            t += self._asm_init + "\""
+            cmd += [t]
+
+        print(cmd)
         b, s = NanoBench.run_command(cmd, root=True, cwd=cwd)
+        print(s)
         if not b:
             return False
 
@@ -610,6 +633,34 @@ class NanoBench:
         NOTE: only for user
         """
         self._basic_mode = True
+        return self
+
+    def constraint(self, c: Union[str, List[str]]) -> 'NanoBench':
+        """
+        :param c: one or more constraint of the form:
+            "rax = 4",
+            "rax < 12",
+            "rax <= 13",
+            "0 <= rax < 7",
+            "0 < rax < 7",
+            "7 > rax >= 0",
+            "rax = *4",
+            "rax = [17]",
+            "rax = [0;17]",
+            "rax = [0u8;17]",
+            "rax = [0u32;17]",
+            "ymm0 = [0u64, 1,2,3]",
+            "rbx < rax",
+        """
+        if isinstance(c, str):
+            c = [c]
+
+        init_asm = []
+        for constr in c:
+            t = parse_constrains(constr)
+            init_asm += t
+
+        self._asm_init += "".join(t)
         return self
 
 
