@@ -2,8 +2,8 @@
 """ constraint interface"""
 
 import random
+from typing import Any, List, Union
 from lark import Lark, Transformer, v_args
-from typing import Union, List, Any
 
 
 # Define the grammar
@@ -60,6 +60,9 @@ def get_type_size(typ: Union[str, None]) -> int:
 
 
 def mov_size(typ: Union[str, None]) -> str:
+    """
+    TODO
+    """
     if typ is None:
         typ = ""
     return {
@@ -69,7 +72,10 @@ def mov_size(typ: Union[str, None]) -> str:
         'u64': 'QWORD'
     }.get(typ, 'QWORD')
 
+
 class AssemblyEmitter:
+    """
+    """
     def __init__(self):
         self.instructions = []
         # min bytes to allocate
@@ -83,16 +89,16 @@ class AssemblyEmitter:
         self._free_regs = ["rax", "rbx", "rcx", "rdx", "r8", "r9", "r10", "r11",
                            "r12", "r13", "r15"]
         self._free_sse_regs = ["xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5",
-                               "xmm6", "xmm7", "xmm8", "xmm9", "xmm10", "xmm12", "xmm13", "xmm14",
-                               "xmm15"]
+        "xmm6", "xmm7", "xmm8", "xmm9", "xmm10", "xmm12", "xmm13", "xmm14",
+        "xmm15"]
         self._free_avx2_regs = ["ymm0", "ymm1", "ymm2", "ymm3", "ymm4", "ymm5",
-                                "ymm6", "ymm7", "ymm8", "ymm9", "ymm10", "ymm12", "ymm13", "ymm14",
-                                "ymm15"]
+        "ymm6", "ymm7", "ymm8", "ymm9", "ymm10", "ymm12", "ymm13", "ymm14",
+        "ymm15"]
         self._free_avx512_regs = ["zmm0", "zmm1", "zmm2", "zmm3", "zmm4", "zmm5",
-                                  "zmm6", "zmm7", "zmm8", "zmm9", "zmm10", "zmm12", "zmm13", "zmm14",
-                                  "zmm15", "zmm16", "zmm17", "zmm18", "zmm19", "zmm20", "zmm21", "zmm22",
-                                  "zmm23", "zmm24", "zmm25", "zmm26", "zmm27", "zmm28", "zmm29", "zmm30",
-                                  "zmm31"]
+            "zmm6", "zmm7", "zmm8", "zmm9", "zmm10", "zmm12", "zmm13", "zmm14",
+            "zmm15", "zmm16", "zmm17", "zmm18", "zmm19", "zmm20", "zmm21",
+            "zmm22", "zmm23", "zmm24", "zmm25", "zmm26", "zmm27", "zmm28", 
+            "zmm29", "zmm30", "zmm31"]
 
         self.free_regs = self._free_regs + self._free_sse_regs + self._free_avx2_regs + \
                          self._free_avx512_regs
@@ -142,6 +148,9 @@ class AssemblyEmitter:
         assert 1 <= len(comparisons) <= 2
 
         def add_comparison_instruction1(c):
+            """
+            TODO 
+            """
             assert len(c) == 3
             l, h = 0, c[2].children[0]
             if "=" not in c[1].value:
@@ -153,6 +162,9 @@ class AssemblyEmitter:
             return self.add_assignment_instruction(register, value)
 
         def add_comparison_instruction2(c1, c2):
+            """
+            TODO 
+            """
             assert len(c1) == 3
             assert len(c2) == 3
             if ">" in c1[1].value: assert ">" in c2[1].value
