@@ -33,7 +33,7 @@ let
     gnumake
     cmake
     #cllvm
-    llvm
+    llvm_20
     libpfm
 
     # needed for nanoBench

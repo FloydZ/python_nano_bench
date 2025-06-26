@@ -1,0 +1,910 @@
+PHI: Unsupported opcode: isPseudo/usesCustomInserter
+INLINEASM: Unsupported opcode: isPseudo/usesCustomInserter
+INLINEASM_BR: Unsupported opcode: isPseudo/usesCustomInserter
+CFI_INSTRUCTION: Unsupported opcode: isPseudo/usesCustomInserter
+EH_LABEL: Unsupported opcode: isPseudo/usesCustomInserter
+GC_LABEL: Unsupported opcode: isPseudo/usesCustomInserter
+ANNOTATION_LABEL: Unsupported opcode: isPseudo/usesCustomInserter
+KILL: Unsupported opcode: isPseudo/usesCustomInserter
+EXTRACT_SUBREG: Unsupported opcode: isPseudo/usesCustomInserter
+INSERT_SUBREG: Unsupported opcode: isPseudo/usesCustomInserter
+IMPLICIT_DEF: Unsupported opcode: isPseudo/usesCustomInserter
+SUBREG_TO_REG: Unsupported opcode: isPseudo/usesCustomInserter
+COPY_TO_REGCLASS: Unsupported opcode: isPseudo/usesCustomInserter
+DBG_VALUE: Unsupported opcode: isPseudo/usesCustomInserter
+DBG_VALUE_LIST: Unsupported opcode: isPseudo/usesCustomInserter
+DBG_INSTR_REF: Unsupported opcode: isPseudo/usesCustomInserter
+DBG_PHI: Unsupported opcode: isPseudo/usesCustomInserter
+DBG_LABEL: Unsupported opcode: isPseudo/usesCustomInserter
+REG_SEQUENCE: Unsupported opcode: isPseudo/usesCustomInserter
+COPY: Unsupported opcode: isPseudo/usesCustomInserter
+BUNDLE: Unsupported opcode: isPseudo/usesCustomInserter
+LIFETIME_START: Unsupported opcode: isPseudo/usesCustomInserter
+LIFETIME_END: Unsupported opcode: isPseudo/usesCustomInserter
+PSEUDO_PROBE: Unsupported opcode: isPseudo/usesCustomInserter
+ARITH_FENCE: Unsupported opcode: isPseudo/usesCustomInserter
+STACKMAP: Unsupported opcode: isPseudo/usesCustomInserter
+FENTRY_CALL: Unsupported opcode: isPseudo/usesCustomInserter
+PATCHPOINT: Unsupported opcode: isPseudo/usesCustomInserter
+LOAD_STACK_GUARD: Unsupported opcode: isPseudo/usesCustomInserter
+PREALLOCATED_SETUP: Unsupported opcode: isPseudo/usesCustomInserter
+PREALLOCATED_ARG: Unsupported opcode: isPseudo/usesCustomInserter
+STATEPOINT: Unsupported opcode: isPseudo/usesCustomInserter
+LOCAL_ESCAPE: Unsupported opcode: isPseudo/usesCustomInserter
+FAULTING_OP: Unsupported opcode: isPseudo/usesCustomInserter
+PATCHABLE_OP: Unsupported opcode: isPseudo/usesCustomInserter
+PATCHABLE_FUNCTION_ENTER: Unsupported opcode: isPseudo/usesCustomInserter
+PATCHABLE_RET: Unsupported opcode: isPseudo/usesCustomInserter
+PATCHABLE_FUNCTION_EXIT: Unsupported opcode: isPseudo/usesCustomInserter
+PATCHABLE_TAIL_CALL: Unsupported opcode: isPseudo/usesCustomInserter
+PATCHABLE_EVENT_CALL: Unsupported opcode: isPseudo/usesCustomInserter
+PATCHABLE_TYPED_EVENT_CALL: Unsupported opcode: isPseudo/usesCustomInserter
+ICALL_BRANCH_FUNNEL: Unsupported opcode: isPseudo/usesCustomInserter
+MEMBARRIER: Unsupported opcode: isPseudo/usesCustomInserter
+JUMP_TABLE_DEBUG_INFO: Unsupported opcode: isPseudo/usesCustomInserter
+CONVERGENCECTRL_ENTRY: Unsupported opcode: isPseudo/usesCustomInserter
+CONVERGENCECTRL_ANCHOR: Unsupported opcode: isPseudo/usesCustomInserter
+CONVERGENCECTRL_LOOP: Unsupported opcode: isPseudo/usesCustomInserter
+CONVERGENCECTRL_GLUE: Unsupported opcode: isPseudo/usesCustomInserter
+G_ASSERT_SEXT: Unsupported opcode: isPseudo/usesCustomInserter
+G_ASSERT_ZEXT: Unsupported opcode: isPseudo/usesCustomInserter
+G_ASSERT_ALIGN: Unsupported opcode: isPseudo/usesCustomInserter
+G_ADD: Unsupported opcode: isPseudo/usesCustomInserter
+G_SUB: Unsupported opcode: isPseudo/usesCustomInserter
+G_MUL: Unsupported opcode: isPseudo/usesCustomInserter
+G_SDIV: Unsupported opcode: isPseudo/usesCustomInserter
+G_UDIV: Unsupported opcode: isPseudo/usesCustomInserter
+G_SREM: Unsupported opcode: isPseudo/usesCustomInserter
+G_UREM: Unsupported opcode: isPseudo/usesCustomInserter
+G_SDIVREM: Unsupported opcode: isPseudo/usesCustomInserter
+G_UDIVREM: Unsupported opcode: isPseudo/usesCustomInserter
+G_AND: Unsupported opcode: isPseudo/usesCustomInserter
+G_OR: Unsupported opcode: isPseudo/usesCustomInserter
+G_XOR: Unsupported opcode: isPseudo/usesCustomInserter
+G_IMPLICIT_DEF: Unsupported opcode: isPseudo/usesCustomInserter
+G_PHI: Unsupported opcode: isPseudo/usesCustomInserter
+G_FRAME_INDEX: Unsupported opcode: isPseudo/usesCustomInserter
+G_GLOBAL_VALUE: Unsupported opcode: isPseudo/usesCustomInserter
+G_PTRAUTH_GLOBAL_VALUE: Unsupported opcode: isPseudo/usesCustomInserter
+G_CONSTANT_POOL: Unsupported opcode: isPseudo/usesCustomInserter
+G_EXTRACT: Unsupported opcode: isPseudo/usesCustomInserter
+G_UNMERGE_VALUES: Unsupported opcode: isPseudo/usesCustomInserter
+G_INSERT: Unsupported opcode: isPseudo/usesCustomInserter
+G_MERGE_VALUES: Unsupported opcode: isPseudo/usesCustomInserter
+G_BUILD_VECTOR: Unsupported opcode: isPseudo/usesCustomInserter
+G_BUILD_VECTOR_TRUNC: Unsupported opcode: isPseudo/usesCustomInserter
+G_CONCAT_VECTORS: Unsupported opcode: isPseudo/usesCustomInserter
+G_PTRTOINT: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTTOPTR: Unsupported opcode: isPseudo/usesCustomInserter
+G_BITCAST: Unsupported opcode: isPseudo/usesCustomInserter
+G_FREEZE: Unsupported opcode: isPseudo/usesCustomInserter
+G_CONSTANT_FOLD_BARRIER: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC_FPTRUNC_ROUND: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC_TRUNC: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC_ROUND: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC_LRINT: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC_LLRINT: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC_ROUNDEVEN: Unsupported opcode: isPseudo/usesCustomInserter
+G_READCYCLECOUNTER: Unsupported opcode: isPseudo/usesCustomInserter
+G_READSTEADYCOUNTER: Unsupported opcode: isPseudo/usesCustomInserter
+G_LOAD: Unsupported opcode: isPseudo/usesCustomInserter
+G_SEXTLOAD: Unsupported opcode: isPseudo/usesCustomInserter
+G_ZEXTLOAD: Unsupported opcode: isPseudo/usesCustomInserter
+G_INDEXED_LOAD: Unsupported opcode: isPseudo/usesCustomInserter
+G_INDEXED_SEXTLOAD: Unsupported opcode: isPseudo/usesCustomInserter
+G_INDEXED_ZEXTLOAD: Unsupported opcode: isPseudo/usesCustomInserter
+G_STORE: Unsupported opcode: isPseudo/usesCustomInserter
+G_INDEXED_STORE: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMIC_CMPXCHG_WITH_SUCCESS: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMIC_CMPXCHG: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_XCHG: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_ADD: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_SUB: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_AND: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_NAND: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_OR: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_XOR: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_MAX: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_MIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_UMAX: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_UMIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_FADD: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_FSUB: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_FMAX: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_FMIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_UINC_WRAP: Unsupported opcode: isPseudo/usesCustomInserter
+G_ATOMICRMW_UDEC_WRAP: Unsupported opcode: isPseudo/usesCustomInserter
+G_FENCE: Unsupported opcode: isPseudo/usesCustomInserter
+G_PREFETCH: Unsupported opcode: isPseudo/usesCustomInserter
+G_BRCOND: Unsupported opcode: isPseudo/usesCustomInserter
+G_BRINDIRECT: Unsupported opcode: isPseudo/usesCustomInserter
+G_INVOKE_REGION_START: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC_W_SIDE_EFFECTS: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC_CONVERGENT: Unsupported opcode: isPseudo/usesCustomInserter
+G_INTRINSIC_CONVERGENT_W_SIDE_EFFECTS: Unsupported opcode: isPseudo/usesCustomInserter
+G_ANYEXT: Unsupported opcode: isPseudo/usesCustomInserter
+G_TRUNC: Unsupported opcode: isPseudo/usesCustomInserter
+G_CONSTANT: Unsupported opcode: isPseudo/usesCustomInserter
+G_FCONSTANT: Unsupported opcode: isPseudo/usesCustomInserter
+G_VASTART: Unsupported opcode: isPseudo/usesCustomInserter
+G_VAARG: Unsupported opcode: isPseudo/usesCustomInserter
+G_SEXT: Unsupported opcode: isPseudo/usesCustomInserter
+G_SEXT_INREG: Unsupported opcode: isPseudo/usesCustomInserter
+G_ZEXT: Unsupported opcode: isPseudo/usesCustomInserter
+G_SHL: Unsupported opcode: isPseudo/usesCustomInserter
+G_LSHR: Unsupported opcode: isPseudo/usesCustomInserter
+G_ASHR: Unsupported opcode: isPseudo/usesCustomInserter
+G_FSHL: Unsupported opcode: isPseudo/usesCustomInserter
+G_FSHR: Unsupported opcode: isPseudo/usesCustomInserter
+G_ROTR: Unsupported opcode: isPseudo/usesCustomInserter
+G_ROTL: Unsupported opcode: isPseudo/usesCustomInserter
+G_ICMP: Unsupported opcode: isPseudo/usesCustomInserter
+G_FCMP: Unsupported opcode: isPseudo/usesCustomInserter
+G_SCMP: Unsupported opcode: isPseudo/usesCustomInserter
+G_UCMP: Unsupported opcode: isPseudo/usesCustomInserter
+G_SELECT: Unsupported opcode: isPseudo/usesCustomInserter
+G_UADDO: Unsupported opcode: isPseudo/usesCustomInserter
+G_UADDE: Unsupported opcode: isPseudo/usesCustomInserter
+G_USUBO: Unsupported opcode: isPseudo/usesCustomInserter
+G_USUBE: Unsupported opcode: isPseudo/usesCustomInserter
+G_SADDO: Unsupported opcode: isPseudo/usesCustomInserter
+G_SADDE: Unsupported opcode: isPseudo/usesCustomInserter
+G_SSUBO: Unsupported opcode: isPseudo/usesCustomInserter
+G_SSUBE: Unsupported opcode: isPseudo/usesCustomInserter
+G_UMULO: Unsupported opcode: isPseudo/usesCustomInserter
+G_SMULO: Unsupported opcode: isPseudo/usesCustomInserter
+G_UMULH: Unsupported opcode: isPseudo/usesCustomInserter
+G_SMULH: Unsupported opcode: isPseudo/usesCustomInserter
+G_UADDSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_SADDSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_USUBSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_SSUBSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_USHLSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_SSHLSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_SMULFIX: Unsupported opcode: isPseudo/usesCustomInserter
+G_UMULFIX: Unsupported opcode: isPseudo/usesCustomInserter
+G_SMULFIXSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_UMULFIXSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_SDIVFIX: Unsupported opcode: isPseudo/usesCustomInserter
+G_UDIVFIX: Unsupported opcode: isPseudo/usesCustomInserter
+G_SDIVFIXSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_UDIVFIXSAT: Unsupported opcode: isPseudo/usesCustomInserter
+G_FADD: Unsupported opcode: isPseudo/usesCustomInserter
+G_FSUB: Unsupported opcode: isPseudo/usesCustomInserter
+G_FMUL: Unsupported opcode: isPseudo/usesCustomInserter
+G_FMA: Unsupported opcode: isPseudo/usesCustomInserter
+G_FMAD: Unsupported opcode: isPseudo/usesCustomInserter
+G_FDIV: Unsupported opcode: isPseudo/usesCustomInserter
+G_FREM: Unsupported opcode: isPseudo/usesCustomInserter
+G_FPOW: Unsupported opcode: isPseudo/usesCustomInserter
+G_FPOWI: Unsupported opcode: isPseudo/usesCustomInserter
+G_FEXP: Unsupported opcode: isPseudo/usesCustomInserter
+G_FEXP2: Unsupported opcode: isPseudo/usesCustomInserter
+G_FEXP10: Unsupported opcode: isPseudo/usesCustomInserter
+G_FLOG: Unsupported opcode: isPseudo/usesCustomInserter
+G_FLOG2: Unsupported opcode: isPseudo/usesCustomInserter
+G_FLOG10: Unsupported opcode: isPseudo/usesCustomInserter
+G_FLDEXP: Unsupported opcode: isPseudo/usesCustomInserter
+G_FFREXP: Unsupported opcode: isPseudo/usesCustomInserter
+G_FNEG: Unsupported opcode: isPseudo/usesCustomInserter
+G_FPEXT: Unsupported opcode: isPseudo/usesCustomInserter
+G_FPTRUNC: Unsupported opcode: isPseudo/usesCustomInserter
+G_FPTOSI: Unsupported opcode: isPseudo/usesCustomInserter
+G_FPTOUI: Unsupported opcode: isPseudo/usesCustomInserter
+G_SITOFP: Unsupported opcode: isPseudo/usesCustomInserter
+G_UITOFP: Unsupported opcode: isPseudo/usesCustomInserter
+G_FABS: Unsupported opcode: isPseudo/usesCustomInserter
+G_FCOPYSIGN: Unsupported opcode: isPseudo/usesCustomInserter
+G_IS_FPCLASS: Unsupported opcode: isPseudo/usesCustomInserter
+G_FCANONICALIZE: Unsupported opcode: isPseudo/usesCustomInserter
+G_FMINNUM: Unsupported opcode: isPseudo/usesCustomInserter
+G_FMAXNUM: Unsupported opcode: isPseudo/usesCustomInserter
+G_FMINNUM_IEEE: Unsupported opcode: isPseudo/usesCustomInserter
+G_FMAXNUM_IEEE: Unsupported opcode: isPseudo/usesCustomInserter
+G_FMINIMUM: Unsupported opcode: isPseudo/usesCustomInserter
+G_FMAXIMUM: Unsupported opcode: isPseudo/usesCustomInserter
+G_GET_FPENV: Unsupported opcode: isPseudo/usesCustomInserter
+G_SET_FPENV: Unsupported opcode: isPseudo/usesCustomInserter
+G_RESET_FPENV: Unsupported opcode: isPseudo/usesCustomInserter
+G_GET_FPMODE: Unsupported opcode: isPseudo/usesCustomInserter
+G_SET_FPMODE: Unsupported opcode: isPseudo/usesCustomInserter
+G_RESET_FPMODE: Unsupported opcode: isPseudo/usesCustomInserter
+G_PTR_ADD: Unsupported opcode: isPseudo/usesCustomInserter
+G_PTRMASK: Unsupported opcode: isPseudo/usesCustomInserter
+G_SMIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_SMAX: Unsupported opcode: isPseudo/usesCustomInserter
+G_UMIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_UMAX: Unsupported opcode: isPseudo/usesCustomInserter
+G_ABS: Unsupported opcode: isPseudo/usesCustomInserter
+G_LROUND: Unsupported opcode: isPseudo/usesCustomInserter
+G_LLROUND: Unsupported opcode: isPseudo/usesCustomInserter
+G_BR: Unsupported opcode: isPseudo/usesCustomInserter
+G_BRJT: Unsupported opcode: isPseudo/usesCustomInserter
+G_VSCALE: Unsupported opcode: isPseudo/usesCustomInserter
+G_INSERT_SUBVECTOR: Unsupported opcode: isPseudo/usesCustomInserter
+G_EXTRACT_SUBVECTOR: Unsupported opcode: isPseudo/usesCustomInserter
+G_INSERT_VECTOR_ELT: Unsupported opcode: isPseudo/usesCustomInserter
+G_EXTRACT_VECTOR_ELT: Unsupported opcode: isPseudo/usesCustomInserter
+G_SHUFFLE_VECTOR: Unsupported opcode: isPseudo/usesCustomInserter
+G_SPLAT_VECTOR: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECTOR_COMPRESS: Unsupported opcode: isPseudo/usesCustomInserter
+G_CTTZ: Unsupported opcode: isPseudo/usesCustomInserter
+G_CTTZ_ZERO_UNDEF: Unsupported opcode: isPseudo/usesCustomInserter
+G_CTLZ: Unsupported opcode: isPseudo/usesCustomInserter
+G_CTLZ_ZERO_UNDEF: Unsupported opcode: isPseudo/usesCustomInserter
+G_CTPOP: Unsupported opcode: isPseudo/usesCustomInserter
+G_BSWAP: Unsupported opcode: isPseudo/usesCustomInserter
+G_BITREVERSE: Unsupported opcode: isPseudo/usesCustomInserter
+G_FCEIL: Unsupported opcode: isPseudo/usesCustomInserter
+G_FCOS: Unsupported opcode: isPseudo/usesCustomInserter
+G_FSIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_FTAN: Unsupported opcode: isPseudo/usesCustomInserter
+G_FACOS: Unsupported opcode: isPseudo/usesCustomInserter
+G_FASIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_FATAN: Unsupported opcode: isPseudo/usesCustomInserter
+G_FCOSH: Unsupported opcode: isPseudo/usesCustomInserter
+G_FSINH: Unsupported opcode: isPseudo/usesCustomInserter
+G_FTANH: Unsupported opcode: isPseudo/usesCustomInserter
+G_FSQRT: Unsupported opcode: isPseudo/usesCustomInserter
+G_FFLOOR: Unsupported opcode: isPseudo/usesCustomInserter
+G_FRINT: Unsupported opcode: isPseudo/usesCustomInserter
+G_FNEARBYINT: Unsupported opcode: isPseudo/usesCustomInserter
+G_ADDRSPACE_CAST: Unsupported opcode: isPseudo/usesCustomInserter
+G_BLOCK_ADDR: Unsupported opcode: isPseudo/usesCustomInserter
+G_JUMP_TABLE: Unsupported opcode: isPseudo/usesCustomInserter
+G_DYN_STACKALLOC: Unsupported opcode: isPseudo/usesCustomInserter
+G_STACKSAVE: Unsupported opcode: isPseudo/usesCustomInserter
+G_STACKRESTORE: Unsupported opcode: isPseudo/usesCustomInserter
+G_STRICT_FADD: Unsupported opcode: isPseudo/usesCustomInserter
+G_STRICT_FSUB: Unsupported opcode: isPseudo/usesCustomInserter
+G_STRICT_FMUL: Unsupported opcode: isPseudo/usesCustomInserter
+G_STRICT_FDIV: Unsupported opcode: isPseudo/usesCustomInserter
+G_STRICT_FREM: Unsupported opcode: isPseudo/usesCustomInserter
+G_STRICT_FMA: Unsupported opcode: isPseudo/usesCustomInserter
+G_STRICT_FSQRT: Unsupported opcode: isPseudo/usesCustomInserter
+G_STRICT_FLDEXP: Unsupported opcode: isPseudo/usesCustomInserter
+G_READ_REGISTER: Unsupported opcode: isPseudo/usesCustomInserter
+G_WRITE_REGISTER: Unsupported opcode: isPseudo/usesCustomInserter
+G_MEMCPY: Unsupported opcode: isPseudo/usesCustomInserter
+G_MEMCPY_INLINE: Unsupported opcode: isPseudo/usesCustomInserter
+G_MEMMOVE: Unsupported opcode: isPseudo/usesCustomInserter
+G_MEMSET: Unsupported opcode: isPseudo/usesCustomInserter
+G_BZERO: Unsupported opcode: isPseudo/usesCustomInserter
+G_TRAP: Unsupported opcode: isPseudo/usesCustomInserter
+G_DEBUGTRAP: Unsupported opcode: isPseudo/usesCustomInserter
+G_UBSANTRAP: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_SEQ_FADD: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_SEQ_FMUL: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_FADD: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_FMUL: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_FMAX: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_FMIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_FMAXIMUM: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_FMINIMUM: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_ADD: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_MUL: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_AND: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_OR: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_XOR: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_SMAX: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_SMIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_UMAX: Unsupported opcode: isPseudo/usesCustomInserter
+G_VECREDUCE_UMIN: Unsupported opcode: isPseudo/usesCustomInserter
+G_SBFX: Unsupported opcode: isPseudo/usesCustomInserter
+G_UBFX: Unsupported opcode: isPseudo/usesCustomInserter
+ADD16ri_DB: Unsupported opcode: isPseudo/usesCustomInserter
+ADD16rr_DB: Unsupported opcode: isPseudo/usesCustomInserter
+ADD32ri_DB: Unsupported opcode: isPseudo/usesCustomInserter
+ADD32rr_DB: Unsupported opcode: isPseudo/usesCustomInserter
+ADD64ri32_DB: Unsupported opcode: isPseudo/usesCustomInserter
+ADD64rr_DB: Unsupported opcode: isPseudo/usesCustomInserter
+ADD8ri_DB: Unsupported opcode: isPseudo/usesCustomInserter
+ADD8rr_DB: Unsupported opcode: isPseudo/usesCustomInserter
+AVX1_SETALLONES: Unsupported opcode: isPseudo/usesCustomInserter
+AVX2_SETALLONES: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_128_SET0: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_256_SET0: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_512_SET0: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_512_SETALLONES: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_512_SEXT_MASK_32: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_512_SEXT_MASK_64: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_FsFLD0F128: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_FsFLD0SD: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_FsFLD0SH: Unsupported opcode: isPseudo/usesCustomInserter
+AVX512_FsFLD0SS: Unsupported opcode: isPseudo/usesCustomInserter
+AVX_SET0: Unsupported opcode: isPseudo/usesCustomInserter
+CALL64m_RVMARKER: Unsupported opcode: isPseudo/usesCustomInserter
+CALL64pcrel32_RVMARKER: Unsupported opcode: isPseudo/usesCustomInserter
+CALL64r_RVMARKER: Unsupported opcode: isPseudo/usesCustomInserter
+FsFLD0F128: Unsupported opcode: isPseudo/usesCustomInserter
+FsFLD0SD: Unsupported opcode: isPseudo/usesCustomInserter
+FsFLD0SH: Unsupported opcode: isPseudo/usesCustomInserter
+FsFLD0SS: Unsupported opcode: isPseudo/usesCustomInserter
+INDIRECT_THUNK_CALL64: Unsupported opcode: isPseudo/usesCustomInserter
+INDIRECT_THUNK_TCRETURN32: Unsupported opcode: isPseudo/usesCustomInserter
+INDIRECT_THUNK_TCRETURN64: Unsupported opcode: isPseudo/usesCustomInserter
+KSET0D: Unsupported opcode: isPseudo/usesCustomInserter
+KSET0Q: Unsupported opcode: isPseudo/usesCustomInserter
+KSET0W: Unsupported opcode: isPseudo/usesCustomInserter
+KSET1D: Unsupported opcode: isPseudo/usesCustomInserter
+KSET1Q: Unsupported opcode: isPseudo/usesCustomInserter
+KSET1W: Unsupported opcode: isPseudo/usesCustomInserter
+LCMPXCHG16B_NO_RBX: Unsupported opcode: isPseudo/usesCustomInserter
+LCMPXCHG16B_SAVE_RBX: Unsupported opcode: isPseudo/usesCustomInserter
+MMX_SET0: Unsupported opcode: isPseudo/usesCustomInserter
+MORESTACK_RET: Unsupported opcode: isPseudo/usesCustomInserter
+MORESTACK_RET_RESTORE_R10: Unsupported opcode: isPseudo/usesCustomInserter
+MOV32ImmSExti8: Unsupported opcode: isPseudo/usesCustomInserter
+MOV32r0: Unsupported opcode: isPseudo/usesCustomInserter
+MOV32ri64: Unsupported opcode: isPseudo/usesCustomInserter
+MOV64ImmSExti8: Unsupported opcode: isPseudo/usesCustomInserter
+MWAITX: Unsupported opcode: isPseudo/usesCustomInserter
+MWAITX_SAVE_RBX: Unsupported opcode: isPseudo/usesCustomInserter
+PLDTILECFGV: Unsupported opcode: isPseudo/usesCustomInserter
+PLEA32r: Unsupported opcode: isPseudo/usesCustomInserter
+PLEA64r: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPBF16PSV: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPBSSDV: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPBSUDV: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPBUSDV: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPBUUDV: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPFP16PSV: Unsupported opcode: isPseudo/usesCustomInserter
+PTILELOADDT1V: Unsupported opcode: isPseudo/usesCustomInserter
+PTILELOADDV: Unsupported opcode: isPseudo/usesCustomInserter
+PTILESTOREDV: Unsupported opcode: isPseudo/usesCustomInserter
+PTILEZEROV: Unsupported opcode: isPseudo/usesCustomInserter
+RDFLAGS64: Unsupported opcode: isPseudo/usesCustomInserter
+SEH_EndPrologue: Unsupported opcode: isPseudo/usesCustomInserter
+SEH_Epilogue: Unsupported opcode: isPseudo/usesCustomInserter
+SEH_PushFrame: Unsupported opcode: isPseudo/usesCustomInserter
+SEH_PushReg: Unsupported opcode: isPseudo/usesCustomInserter
+SEH_SaveReg: Unsupported opcode: isPseudo/usesCustomInserter
+SEH_SaveXMM: Unsupported opcode: isPseudo/usesCustomInserter
+SEH_SetFrame: Unsupported opcode: isPseudo/usesCustomInserter
+SEH_StackAlign: Unsupported opcode: isPseudo/usesCustomInserter
+SEH_StackAlloc: Unsupported opcode: isPseudo/usesCustomInserter
+SETB_C32r: Unsupported opcode: isPseudo/usesCustomInserter
+SETB_C64r: Unsupported opcode: isPseudo/usesCustomInserter
+SHLDROT32ri: Unsupported opcode: isPseudo/usesCustomInserter
+SHLDROT64ri: Unsupported opcode: isPseudo/usesCustomInserter
+SHRDROT32ri: Unsupported opcode: isPseudo/usesCustomInserter
+SHRDROT64ri: Unsupported opcode: isPseudo/usesCustomInserter
+VMOVAPSZ128mr_NOVLX: Unsupported opcode: isPseudo/usesCustomInserter
+VMOVAPSZ128rm_NOVLX: Unsupported opcode: isPseudo/usesCustomInserter
+VMOVAPSZ256mr_NOVLX: Unsupported opcode: isPseudo/usesCustomInserter
+VMOVAPSZ256rm_NOVLX: Unsupported opcode: isPseudo/usesCustomInserter
+VMOVUPSZ128mr_NOVLX: Unsupported opcode: isPseudo/usesCustomInserter
+VMOVUPSZ128rm_NOVLX: Unsupported opcode: isPseudo/usesCustomInserter
+VMOVUPSZ256mr_NOVLX: Unsupported opcode: isPseudo/usesCustomInserter
+VMOVUPSZ256rm_NOVLX: Unsupported opcode: isPseudo/usesCustomInserter
+V_SET0: Unsupported opcode: isPseudo/usesCustomInserter
+V_SETALLONES: Unsupported opcode: isPseudo/usesCustomInserter
+WRFLAGS64: Unsupported opcode: isPseudo/usesCustomInserter
+XABORT_DEF: Unsupported opcode: isPseudo/usesCustomInserter
+XOR32_FP: Unsupported opcode: isPseudo/usesCustomInserter
+XOR64_FP: Unsupported opcode: isPseudo/usesCustomInserter
+ABS_Fp32: unsupported opcode: pseudo instruction
+ABS_Fp64: unsupported opcode: pseudo instruction
+ABS_Fp80: unsupported opcode: pseudo instruction
+ADD_FPrST0: unsupported second-form X87 instruction
+ADD_FST0r: unsupported second-form X87 instruction
+ADD_Fp32: unsupported opcode: pseudo instruction
+ADD_Fp32m: unsupported opcode: pseudo instruction
+ADD_Fp64: unsupported opcode: pseudo instruction
+ADD_Fp64m: unsupported opcode: pseudo instruction
+ADD_Fp64m32: unsupported opcode: pseudo instruction
+ADD_Fp80: unsupported opcode: pseudo instruction
+ADD_Fp80m32: unsupported opcode: pseudo instruction
+ADD_Fp80m64: unsupported opcode: pseudo instruction
+ADD_FpI16m32: unsupported opcode: pseudo instruction
+ADD_FpI16m64: unsupported opcode: pseudo instruction
+ADD_FpI16m80: unsupported opcode: pseudo instruction
+ADD_FpI32m32: unsupported opcode: pseudo instruction
+ADD_FpI32m64: unsupported opcode: pseudo instruction
+ADD_FpI32m80: unsupported opcode: pseudo instruction
+ADD_FrST0: unsupported second-form X87 instruction
+ADJCALLSTACKDOWN32: unsupported opcode: pseudo instruction
+ADJCALLSTACKDOWN64: unsupported opcode: pseudo instruction
+ADJCALLSTACKUP32: unsupported opcode: pseudo instruction
+ADJCALLSTACKUP64: unsupported opcode: pseudo instruction
+ASAN_CHECK_MEMACCESS: unsupported opcode: pseudo instruction
+CALL64m: Unsupported opcode: isCall/isReturn
+CALL64m_NT: Unsupported opcode: isCall/isReturn
+CALL64pcrel32: Unsupported opcode: isCall/isReturn
+CALL64r: Unsupported opcode: isCall/isReturn
+CALL64r_NT: Unsupported opcode: isCall/isReturn
+CATCHRET: Unsupported opcode: isPseudo/usesCustomInserter
+CFCMOV16mr: Unknown FormMask value
+CFCMOV16rr: Unknown FormMask value
+CFCMOV32mr: Unknown FormMask value
+CFCMOV32rr: Unknown FormMask value
+CFCMOV64mr: Unknown FormMask value
+CFCMOV64rr: Unknown FormMask value
+CHS_Fp32: unsupported opcode: pseudo instruction
+CHS_Fp64: unsupported opcode: pseudo instruction
+CHS_Fp80: unsupported opcode: pseudo instruction
+CLEANUPRET: Unsupported opcode: isCall/isReturn
+CMOVBE_F: unsupported second-form X87 instruction
+CMOVBE_Fp32: unsupported opcode: pseudo instruction
+CMOVBE_Fp64: unsupported opcode: pseudo instruction
+CMOVBE_Fp80: unsupported opcode: pseudo instruction
+CMOVB_F: unsupported second-form X87 instruction
+CMOVB_Fp32: unsupported opcode: pseudo instruction
+CMOVB_Fp64: unsupported opcode: pseudo instruction
+CMOVB_Fp80: unsupported opcode: pseudo instruction
+CMOVE_F: unsupported second-form X87 instruction
+CMOVE_Fp32: unsupported opcode: pseudo instruction
+CMOVE_Fp64: unsupported opcode: pseudo instruction
+CMOVE_Fp80: unsupported opcode: pseudo instruction
+CMOVNBE_F: unsupported second-form X87 instruction
+CMOVNBE_Fp32: unsupported opcode: pseudo instruction
+CMOVNBE_Fp64: unsupported opcode: pseudo instruction
+CMOVNBE_Fp80: unsupported opcode: pseudo instruction
+CMOVNB_F: unsupported second-form X87 instruction
+CMOVNB_Fp32: unsupported opcode: pseudo instruction
+CMOVNB_Fp64: unsupported opcode: pseudo instruction
+CMOVNB_Fp80: unsupported opcode: pseudo instruction
+CMOVNE_F: unsupported second-form X87 instruction
+CMOVNE_Fp32: unsupported opcode: pseudo instruction
+CMOVNE_Fp64: unsupported opcode: pseudo instruction
+CMOVNE_Fp80: unsupported opcode: pseudo instruction
+CMOVNP_F: unsupported second-form X87 instruction
+CMOVNP_Fp32: unsupported opcode: pseudo instruction
+CMOVNP_Fp64: unsupported opcode: pseudo instruction
+CMOVNP_Fp80: unsupported opcode: pseudo instruction
+CMOVP_F: unsupported second-form X87 instruction
+CMOVP_Fp32: unsupported opcode: pseudo instruction
+CMOVP_Fp64: unsupported opcode: pseudo instruction
+CMOVP_Fp80: unsupported opcode: pseudo instruction
+CMOV_FR16: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_FR16X: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_FR32: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_FR32X: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_FR64: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_FR64X: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_GR16: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_GR32: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_GR8: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_RFP32: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_RFP64: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_RFP80: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VK1: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VK16: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VK2: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VK32: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VK4: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VK64: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VK8: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VR128: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VR128X: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VR256: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VR256X: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VR512: Unsupported opcode: isPseudo/usesCustomInserter
+CMOV_VR64: Unsupported opcode: isPseudo/usesCustomInserter
+CMPCCXADDmr32: Unknown FormMask value
+CMPCCXADDmr32_EVEX: Unknown FormMask value
+CMPCCXADDmr64: Unknown FormMask value
+CMPCCXADDmr64_EVEX: Unknown FormMask value
+CMPSB: Infeasible : memory instruction uses scratch memory register
+CMPSL: Infeasible : memory instruction uses scratch memory register
+CMPSQ: Infeasible : memory instruction uses scratch memory register
+CMPSW: Infeasible : memory instruction uses scratch memory register
+COMP_FST0r: unsupported second-form X87 instruction
+COM_FIPr: unsupported second-form X87 instruction
+COM_FIr: unsupported second-form X87 instruction
+COM_FST0r: unsupported second-form X87 instruction
+COM_FpIr32: unsupported opcode: pseudo instruction
+COM_FpIr64: unsupported opcode: pseudo instruction
+COM_FpIr80: unsupported opcode: pseudo instruction
+COM_Fpr32: unsupported opcode: pseudo instruction
+COM_Fpr64: unsupported opcode: pseudo instruction
+COM_Fpr80: unsupported opcode: pseudo instruction
+DIVR_FPrST0: unsupported second-form X87 instruction
+DIVR_FST0r: unsupported second-form X87 instruction
+DIVR_Fp32m: unsupported opcode: pseudo instruction
+DIVR_Fp64m: unsupported opcode: pseudo instruction
+DIVR_Fp64m32: unsupported opcode: pseudo instruction
+DIVR_Fp80m32: unsupported opcode: pseudo instruction
+DIVR_Fp80m64: unsupported opcode: pseudo instruction
+DIVR_FpI16m32: unsupported opcode: pseudo instruction
+DIVR_FpI16m64: unsupported opcode: pseudo instruction
+DIVR_FpI16m80: unsupported opcode: pseudo instruction
+DIVR_FpI32m32: unsupported opcode: pseudo instruction
+DIVR_FpI32m64: unsupported opcode: pseudo instruction
+DIVR_FpI32m80: unsupported opcode: pseudo instruction
+DIVR_FrST0: unsupported second-form X87 instruction
+DIV_FPrST0: unsupported second-form X87 instruction
+DIV_FST0r: unsupported second-form X87 instruction
+DIV_Fp32: unsupported opcode: pseudo instruction
+DIV_Fp32m: unsupported opcode: pseudo instruction
+DIV_Fp64: unsupported opcode: pseudo instruction
+DIV_Fp64m: unsupported opcode: pseudo instruction
+DIV_Fp64m32: unsupported opcode: pseudo instruction
+DIV_Fp80: unsupported opcode: pseudo instruction
+DIV_Fp80m32: unsupported opcode: pseudo instruction
+DIV_Fp80m64: unsupported opcode: pseudo instruction
+DIV_FpI16m32: unsupported opcode: pseudo instruction
+DIV_FpI16m64: unsupported opcode: pseudo instruction
+DIV_FpI16m80: unsupported opcode: pseudo instruction
+DIV_FpI32m32: unsupported opcode: pseudo instruction
+DIV_FpI32m64: unsupported opcode: pseudo instruction
+DIV_FpI32m80: unsupported opcode: pseudo instruction
+DIV_FrST0: unsupported second-form X87 instruction
+DYN_ALLOCA_32: unsupported opcode: pseudo instruction
+DYN_ALLOCA_64: unsupported opcode: pseudo instruction
+EH_RETURN: Unsupported opcode: isCall/isReturn
+EH_RETURN64: Unsupported opcode: isCall/isReturn
+EH_SjLj_LongJmp64: Unsupported opcode: isPseudo/usesCustomInserter
+EH_SjLj_SetJmp64: Unsupported opcode: isPseudo/usesCustomInserter
+EH_SjLj_Setup: Unsupported opcode: isBranch/isIndirectBranch
+FARCALL16m: Unsupported opcode: isCall/isReturn
+FARCALL32m: Unsupported opcode: isCall/isReturn
+FARCALL64m: Unsupported opcode: isCall/isReturn
+FARJMP16m: Unsupported opcode: isBranch/isIndirectBranch
+FARJMP32m: Unsupported opcode: isBranch/isIndirectBranch
+FARJMP64m: Unsupported opcode: isBranch/isIndirectBranch
+FFREE: unsupported second-form X87 instruction
+FFREEP: unsupported second-form X87 instruction
+FP32_TO_INT16_IN_MEM: Unsupported opcode: isPseudo/usesCustomInserter
+FP32_TO_INT32_IN_MEM: Unsupported opcode: isPseudo/usesCustomInserter
+FP32_TO_INT64_IN_MEM: Unsupported opcode: isPseudo/usesCustomInserter
+FP64_TO_INT16_IN_MEM: Unsupported opcode: isPseudo/usesCustomInserter
+FP64_TO_INT32_IN_MEM: Unsupported opcode: isPseudo/usesCustomInserter
+FP64_TO_INT64_IN_MEM: Unsupported opcode: isPseudo/usesCustomInserter
+FP80_ADDm32: Unsupported opcode: isPseudo/usesCustomInserter
+FP80_ADDr: Unsupported opcode: isPseudo/usesCustomInserter
+FP80_TO_INT16_IN_MEM: Unsupported opcode: isPseudo/usesCustomInserter
+FP80_TO_INT32_IN_MEM: Unsupported opcode: isPseudo/usesCustomInserter
+FP80_TO_INT64_IN_MEM: Unsupported opcode: isPseudo/usesCustomInserter
+ILD_Fp16m32: unsupported opcode: pseudo instruction
+ILD_Fp16m64: unsupported opcode: pseudo instruction
+ILD_Fp16m80: unsupported opcode: pseudo instruction
+ILD_Fp32m32: unsupported opcode: pseudo instruction
+ILD_Fp32m64: unsupported opcode: pseudo instruction
+ILD_Fp32m80: unsupported opcode: pseudo instruction
+ILD_Fp64m32: unsupported opcode: pseudo instruction
+ILD_Fp64m64: unsupported opcode: pseudo instruction
+ILD_Fp64m80: unsupported opcode: pseudo instruction
+INSB: Infeasible : memory instruction uses scratch memory register
+INSL: Infeasible : memory instruction uses scratch memory register
+INSW: Infeasible : memory instruction uses scratch memory register
+IRET: Unsupported opcode: isCall/isReturn
+IRET16: Unsupported opcode: isCall/isReturn
+IRET32: Unsupported opcode: isCall/isReturn
+IRET64: Unsupported opcode: isCall/isReturn
+ISTT_Fp16m32: unsupported opcode: pseudo instruction
+ISTT_Fp16m64: unsupported opcode: pseudo instruction
+ISTT_Fp16m80: unsupported opcode: pseudo instruction
+ISTT_Fp32m32: unsupported opcode: pseudo instruction
+ISTT_Fp32m64: unsupported opcode: pseudo instruction
+ISTT_Fp32m80: unsupported opcode: pseudo instruction
+ISTT_Fp64m32: unsupported opcode: pseudo instruction
+ISTT_Fp64m64: unsupported opcode: pseudo instruction
+ISTT_Fp64m80: unsupported opcode: pseudo instruction
+IST_Fp16m32: unsupported opcode: pseudo instruction
+IST_Fp16m64: unsupported opcode: pseudo instruction
+IST_Fp16m80: unsupported opcode: pseudo instruction
+IST_Fp32m32: unsupported opcode: pseudo instruction
+IST_Fp32m64: unsupported opcode: pseudo instruction
+IST_Fp32m80: unsupported opcode: pseudo instruction
+IST_Fp64m32: unsupported opcode: pseudo instruction
+IST_Fp64m64: unsupported opcode: pseudo instruction
+IST_Fp64m80: unsupported opcode: pseudo instruction
+Int_eh_sjlj_setup_dispatch: Unsupported opcode: isPseudo/usesCustomInserter
+JCC_1: Unsupported opcode: isBranch/isIndirectBranch
+JCC_2: Unsupported opcode: isBranch/isIndirectBranch
+JCC_4: Unsupported opcode: isBranch/isIndirectBranch
+JECXZ: Unsupported opcode: isBranch/isIndirectBranch
+JMP64m: Unsupported opcode: isBranch/isIndirectBranch
+JMP64m_NT: Unsupported opcode: isBranch/isIndirectBranch
+JMP64m_REX: Unsupported opcode: isBranch/isIndirectBranch
+JMP64r: Unsupported opcode: isBranch/isIndirectBranch
+JMP64r_NT: Unsupported opcode: isBranch/isIndirectBranch
+JMP64r_REX: Unsupported opcode: isBranch/isIndirectBranch
+JMP_1: Unsupported opcode: isBranch/isIndirectBranch
+JMP_2: Unsupported opcode: isBranch/isIndirectBranch
+JMP_4: Unsupported opcode: isBranch/isIndirectBranch
+JRCXZ: Unsupported opcode: isBranch/isIndirectBranch
+KCFI_CHECK: unsupported opcode: pseudo instruction
+LCMPXCHG8B: Unsupported opcode: isPseudo/usesCustomInserter
+LD_Fp032: unsupported opcode: pseudo instruction
+LD_Fp064: unsupported opcode: pseudo instruction
+LD_Fp080: unsupported opcode: pseudo instruction
+LD_Fp132: unsupported opcode: pseudo instruction
+LD_Fp164: unsupported opcode: pseudo instruction
+LD_Fp180: unsupported opcode: pseudo instruction
+LD_Fp32m: unsupported opcode: pseudo instruction
+LD_Fp32m64: unsupported opcode: pseudo instruction
+LD_Fp32m80: unsupported opcode: pseudo instruction
+LD_Fp64m: unsupported opcode: pseudo instruction
+LD_Fp64m80: unsupported opcode: pseudo instruction
+LD_Fp80m: unsupported opcode: pseudo instruction
+LD_Frr: unsupported second-form X87 instruction
+LEAVE64: unsupported opcode: Push/Pop/AdjCallStack/Leave
+LFS16rm: unsupported opcode
+LFS32rm: unsupported opcode
+LFS64rm: unsupported opcode
+LGS16rm: unsupported opcode
+LGS32rm: unsupported opcode
+LGS64rm: unsupported opcode
+LODSB: unsupported opcode: non uniform memory access
+LODSL: unsupported opcode: non uniform memory access
+LODSQ: unsupported opcode: non uniform memory access
+LODSW: unsupported opcode: non uniform memory access
+LOOP: Unsupported opcode: isBranch/isIndirectBranch
+LOOPE: Unsupported opcode: isBranch/isIndirectBranch
+LOOPNE: Unsupported opcode: isBranch/isIndirectBranch
+LRET16: Unsupported opcode: isCall/isReturn
+LRET32: Unsupported opcode: isCall/isReturn
+LRET64: Unsupported opcode: isCall/isReturn
+LRETI16: Unsupported opcode: isCall/isReturn
+LRETI32: Unsupported opcode: isCall/isReturn
+LRETI64: Unsupported opcode: isCall/isReturn
+LSS16rm: unsupported opcode
+LSS32rm: unsupported opcode
+LSS64rm: unsupported opcode
+MASKPAIR16LOAD: unsupported opcode: pseudo instruction
+MASKPAIR16STORE: unsupported opcode: pseudo instruction
+MOV16ao16: unsupported opcode: non uniform memory access
+MOV16ao32: unsupported opcode: non uniform memory access
+MOV16ao64: unsupported opcode: non uniform memory access
+MOV16ms: no available registers:
+candidates:
+
+forbidden:
+AH BH CH CS DH DI DIH DIL DS EDI EIP ES ESP FPCW FPSW FS GS HDI HIP HSP IP MXCSR RDI RIP RSP SP SPH SPL SS SSP ST0 ST1 ST2 ST3 ST4 ST5 ST6 ST7 XMM16 XMM17 XMM18 XMM19 XMM20 XMM21 XMM22 XMM23 XMM24 XMM25 XMM26 XMM27 XMM28 XMM29 XMM30 XMM31 YMM16 YMM17 YMM18 YMM19 YMM20 YMM21 YMM22 YMM23 YMM24 YMM25 YMM26 YMM27 YMM28 YMM29 YMM30 YMM31 ZMM16 ZMM17 ZMM18 ZMM19 ZMM20 ZMM21 ZMM22 ZMM23 ZMM24 ZMM25 ZMM26 ZMM27 ZMM28 ZMM29 ZMM30 ZMM31 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R16B R17B R18B R19B R20B R21B R22B R23B R24B R25B R26B R27B R28B R29B R30B R31B R16BH R17BH R18BH R19BH R20BH R21BH R22BH R23BH R24BH R25BH R26BH R27BH R28BH R29BH R30BH R31BH R16D R17D R18D R19D R20D R21D R22D R23D R24D R25D R26D R27D R28D R29D R30D R31D R16W R17W R18W R19W R20W R21W R22W R23W R24W R25W R26W R27W R28W R29W R30W R31W R16WH R17WH R18WH R19WH R20WH R21WH R22WH R23WH R24WH R25WH R26WH R27WH R28WH R29WH R30WH R31WH 
+MOV16o16a: unsupported opcode: non uniform memory access
+MOV16o32a: unsupported opcode: non uniform memory access
+MOV16o64a: unsupported opcode: non uniform memory access
+MOV16rs: no available registers:
+candidates:
+
+forbidden:
+AH BH CH CS DH DS EIP ES ESP FPCW FPSW FS GS HIP HSP IP MXCSR RIP RSP SP SPH SPL SS SSP ST0 ST1 ST2 ST3 ST4 ST5 ST6 ST7 XMM16 XMM17 XMM18 XMM19 XMM20 XMM21 XMM22 XMM23 XMM24 XMM25 XMM26 XMM27 XMM28 XMM29 XMM30 XMM31 YMM16 YMM17 YMM18 YMM19 YMM20 YMM21 YMM22 YMM23 YMM24 YMM25 YMM26 YMM27 YMM28 YMM29 YMM30 YMM31 ZMM16 ZMM17 ZMM18 ZMM19 ZMM20 ZMM21 ZMM22 ZMM23 ZMM24 ZMM25 ZMM26 ZMM27 ZMM28 ZMM29 ZMM30 ZMM31 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R16B R17B R18B R19B R20B R21B R22B R23B R24B R25B R26B R27B R28B R29B R30B R31B R16BH R17BH R18BH R19BH R20BH R21BH R22BH R23BH R24BH R25BH R26BH R27BH R28BH R29BH R30BH R31BH R16D R17D R18D R19D R20D R21D R22D R23D R24D R25D R26D R27D R28D R29D R30D R31D R16W R17W R18W R19W R20W R21W R22W R23W R24W R25W R26W R27W R28W R29W R30W R31W R16WH R17WH R18WH R19WH R20WH R21WH R22WH R23WH R24WH R25WH R26WH R27WH R28WH R29WH R30WH R31WH 
+MOV16sm: no available registers:
+candidates:
+
+forbidden:
+AH BH CH CS DH DI DIH DIL DS EDI EIP ES ESP FPCW FPSW FS GS HDI HIP HSP IP MXCSR RDI RIP RSP SP SPH SPL SS SSP ST0 ST1 ST2 ST3 ST4 ST5 ST6 ST7 XMM16 XMM17 XMM18 XMM19 XMM20 XMM21 XMM22 XMM23 XMM24 XMM25 XMM26 XMM27 XMM28 XMM29 XMM30 XMM31 YMM16 YMM17 YMM18 YMM19 YMM20 YMM21 YMM22 YMM23 YMM24 YMM25 YMM26 YMM27 YMM28 YMM29 YMM30 YMM31 ZMM16 ZMM17 ZMM18 ZMM19 ZMM20 ZMM21 ZMM22 ZMM23 ZMM24 ZMM25 ZMM26 ZMM27 ZMM28 ZMM29 ZMM30 ZMM31 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R16B R17B R18B R19B R20B R21B R22B R23B R24B R25B R26B R27B R28B R29B R30B R31B R16BH R17BH R18BH R19BH R20BH R21BH R22BH R23BH R24BH R25BH R26BH R27BH R28BH R29BH R30BH R31BH R16D R17D R18D R19D R20D R21D R22D R23D R24D R25D R26D R27D R28D R29D R30D R31D R16W R17W R18W R19W R20W R21W R22W R23W R24W R25W R26W R27W R28W R29W R30W R31W R16WH R17WH R18WH R19WH R20WH R21WH R22WH R23WH R24WH R25WH R26WH R27WH R28WH R29WH R30WH R31WH 
+MOV16sr: no available registers:
+candidates:
+
+forbidden:
+AH BH CH CS DH DS EIP ES ESP FPCW FPSW FS GS HIP HSP IP MXCSR RIP RSP SP SPH SPL SS SSP ST0 ST1 ST2 ST3 ST4 ST5 ST6 ST7 XMM16 XMM17 XMM18 XMM19 XMM20 XMM21 XMM22 XMM23 XMM24 XMM25 XMM26 XMM27 XMM28 XMM29 XMM30 XMM31 YMM16 YMM17 YMM18 YMM19 YMM20 YMM21 YMM22 YMM23 YMM24 YMM25 YMM26 YMM27 YMM28 YMM29 YMM30 YMM31 ZMM16 ZMM17 ZMM18 ZMM19 ZMM20 ZMM21 ZMM22 ZMM23 ZMM24 ZMM25 ZMM26 ZMM27 ZMM28 ZMM29 ZMM30 ZMM31 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R16B R17B R18B R19B R20B R21B R22B R23B R24B R25B R26B R27B R28B R29B R30B R31B R16BH R17BH R18BH R19BH R20BH R21BH R22BH R23BH R24BH R25BH R26BH R27BH R28BH R29BH R30BH R31BH R16D R17D R18D R19D R20D R21D R22D R23D R24D R25D R26D R27D R28D R29D R30D R31D R16W R17W R18W R19W R20W R21W R22W R23W R24W R25W R26W R27W R28W R29W R30W R31W R16WH R17WH R18WH R19WH R20WH R21WH R22WH R23WH R24WH R25WH R26WH R27WH R28WH R29WH R30WH R31WH 
+MOV32ao16: unsupported opcode: non uniform memory access
+MOV32ao32: unsupported opcode: non uniform memory access
+MOV32ao64: unsupported opcode: non uniform memory access
+MOV32o16a: unsupported opcode: non uniform memory access
+MOV32o32a: unsupported opcode: non uniform memory access
+MOV32o64a: unsupported opcode: non uniform memory access
+MOV32rs: no available registers:
+candidates:
+
+forbidden:
+AH BH CH CS DH DS EIP ES ESP FPCW FPSW FS GS HIP HSP IP MXCSR RIP RSP SP SPH SPL SS SSP ST0 ST1 ST2 ST3 ST4 ST5 ST6 ST7 XMM16 XMM17 XMM18 XMM19 XMM20 XMM21 XMM22 XMM23 XMM24 XMM25 XMM26 XMM27 XMM28 XMM29 XMM30 XMM31 YMM16 YMM17 YMM18 YMM19 YMM20 YMM21 YMM22 YMM23 YMM24 YMM25 YMM26 YMM27 YMM28 YMM29 YMM30 YMM31 ZMM16 ZMM17 ZMM18 ZMM19 ZMM20 ZMM21 ZMM22 ZMM23 ZMM24 ZMM25 ZMM26 ZMM27 ZMM28 ZMM29 ZMM30 ZMM31 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R16B R17B R18B R19B R20B R21B R22B R23B R24B R25B R26B R27B R28B R29B R30B R31B R16BH R17BH R18BH R19BH R20BH R21BH R22BH R23BH R24BH R25BH R26BH R27BH R28BH R29BH R30BH R31BH R16D R17D R18D R19D R20D R21D R22D R23D R24D R25D R26D R27D R28D R29D R30D R31D R16W R17W R18W R19W R20W R21W R22W R23W R24W R25W R26W R27W R28W R29W R30W R31W R16WH R17WH R18WH R19WH R20WH R21WH R22WH R23WH R24WH R25WH R26WH R27WH R28WH R29WH R30WH R31WH 
+MOV32sr: no available registers:
+candidates:
+
+forbidden:
+AH BH CH CS DH DS EIP ES ESP FPCW FPSW FS GS HIP HSP IP MXCSR RIP RSP SP SPH SPL SS SSP ST0 ST1 ST2 ST3 ST4 ST5 ST6 ST7 XMM16 XMM17 XMM18 XMM19 XMM20 XMM21 XMM22 XMM23 XMM24 XMM25 XMM26 XMM27 XMM28 XMM29 XMM30 XMM31 YMM16 YMM17 YMM18 YMM19 YMM20 YMM21 YMM22 YMM23 YMM24 YMM25 YMM26 YMM27 YMM28 YMM29 YMM30 YMM31 ZMM16 ZMM17 ZMM18 ZMM19 ZMM20 ZMM21 ZMM22 ZMM23 ZMM24 ZMM25 ZMM26 ZMM27 ZMM28 ZMM29 ZMM30 ZMM31 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R16B R17B R18B R19B R20B R21B R22B R23B R24B R25B R26B R27B R28B R29B R30B R31B R16BH R17BH R18BH R19BH R20BH R21BH R22BH R23BH R24BH R25BH R26BH R27BH R28BH R29BH R30BH R31BH R16D R17D R18D R19D R20D R21D R22D R23D R24D R25D R26D R27D R28D R29D R30D R31D R16W R17W R18W R19W R20W R21W R22W R23W R24W R25W R26W R27W R28W R29W R30W R31W R16WH R17WH R18WH R19WH R20WH R21WH R22WH R23WH R24WH R25WH R26WH R27WH R28WH R29WH R30WH R31WH 
+MOV64ao32: unsupported opcode: non uniform memory access
+MOV64ao64: unsupported opcode: non uniform memory access
+MOV64o32a: unsupported opcode: non uniform memory access
+MOV64o64a: unsupported opcode: non uniform memory access
+MOV64rs: no available registers:
+candidates:
+
+forbidden:
+AH BH CH CS DH DS EIP ES ESP FPCW FPSW FS GS HIP HSP IP MXCSR RIP RSP SP SPH SPL SS SSP ST0 ST1 ST2 ST3 ST4 ST5 ST6 ST7 XMM16 XMM17 XMM18 XMM19 XMM20 XMM21 XMM22 XMM23 XMM24 XMM25 XMM26 XMM27 XMM28 XMM29 XMM30 XMM31 YMM16 YMM17 YMM18 YMM19 YMM20 YMM21 YMM22 YMM23 YMM24 YMM25 YMM26 YMM27 YMM28 YMM29 YMM30 YMM31 ZMM16 ZMM17 ZMM18 ZMM19 ZMM20 ZMM21 ZMM22 ZMM23 ZMM24 ZMM25 ZMM26 ZMM27 ZMM28 ZMM29 ZMM30 ZMM31 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R16B R17B R18B R19B R20B R21B R22B R23B R24B R25B R26B R27B R28B R29B R30B R31B R16BH R17BH R18BH R19BH R20BH R21BH R22BH R23BH R24BH R25BH R26BH R27BH R28BH R29BH R30BH R31BH R16D R17D R18D R19D R20D R21D R22D R23D R24D R25D R26D R27D R28D R29D R30D R31D R16W R17W R18W R19W R20W R21W R22W R23W R24W R25W R26W R27W R28W R29W R30W R31W R16WH R17WH R18WH R19WH R20WH R21WH R22WH R23WH R24WH R25WH R26WH R27WH R28WH R29WH R30WH R31WH 
+MOV64sr: no available registers:
+candidates:
+
+forbidden:
+AH BH CH CS DH DS EIP ES ESP FPCW FPSW FS GS HIP HSP IP MXCSR RIP RSP SP SPH SPL SS SSP ST0 ST1 ST2 ST3 ST4 ST5 ST6 ST7 XMM16 XMM17 XMM18 XMM19 XMM20 XMM21 XMM22 XMM23 XMM24 XMM25 XMM26 XMM27 XMM28 XMM29 XMM30 XMM31 YMM16 YMM17 YMM18 YMM19 YMM20 YMM21 YMM22 YMM23 YMM24 YMM25 YMM26 YMM27 YMM28 YMM29 YMM30 YMM31 ZMM16 ZMM17 ZMM18 ZMM19 ZMM20 ZMM21 ZMM22 ZMM23 ZMM24 ZMM25 ZMM26 ZMM27 ZMM28 ZMM29 ZMM30 ZMM31 R16 R17 R18 R19 R20 R21 R22 R23 R24 R25 R26 R27 R28 R29 R30 R31 R16B R17B R18B R19B R20B R21B R22B R23B R24B R25B R26B R27B R28B R29B R30B R31B R16BH R17BH R18BH R19BH R20BH R21BH R22BH R23BH R24BH R25BH R26BH R27BH R28BH R29BH R30BH R31BH R16D R17D R18D R19D R20D R21D R22D R23D R24D R25D R26D R27D R28D R29D R30D R31D R16W R17W R18W R19W R20W R21W R22W R23W R24W R25W R26W R27W R28W R29W R30W R31W R16WH R17WH R18WH R19WH R20WH R21WH R22WH R23WH R24WH R25WH R26WH R27WH R28WH R29WH R30WH R31WH 
+MOV8ao16: unsupported opcode: non uniform memory access
+MOV8ao32: unsupported opcode: non uniform memory access
+MOV8ao64: unsupported opcode: non uniform memory access
+MOV8o16a: unsupported opcode: non uniform memory access
+MOV8o32a: unsupported opcode: non uniform memory access
+MOV8o64a: unsupported opcode: non uniform memory access
+MOVPC32r: unsupported opcode: pseudo instruction
+MOVSB: Infeasible : memory instruction uses scratch memory register
+MOVSL: Infeasible : memory instruction uses scratch memory register
+MOVSQ: Infeasible : memory instruction uses scratch memory register
+MOVSW: Infeasible : memory instruction uses scratch memory register
+MULX32Hrm: unsupported opcode: pseudo instruction
+MULX32Hrr: unsupported opcode: pseudo instruction
+MULX64Hrm: unsupported opcode: pseudo instruction
+MULX64Hrr: unsupported opcode: pseudo instruction
+MUL_FPrST0: unsupported second-form X87 instruction
+MUL_FST0r: unsupported second-form X87 instruction
+MUL_Fp32: unsupported opcode: pseudo instruction
+MUL_Fp32m: unsupported opcode: pseudo instruction
+MUL_Fp64: unsupported opcode: pseudo instruction
+MUL_Fp64m: unsupported opcode: pseudo instruction
+MUL_Fp64m32: unsupported opcode: pseudo instruction
+MUL_Fp80: unsupported opcode: pseudo instruction
+MUL_Fp80m32: unsupported opcode: pseudo instruction
+MUL_Fp80m64: unsupported opcode: pseudo instruction
+MUL_FpI16m32: unsupported opcode: pseudo instruction
+MUL_FpI16m64: unsupported opcode: pseudo instruction
+MUL_FpI16m80: unsupported opcode: pseudo instruction
+MUL_FpI32m32: unsupported opcode: pseudo instruction
+MUL_FpI32m64: unsupported opcode: pseudo instruction
+MUL_FpI32m80: unsupported opcode: pseudo instruction
+MUL_FrST0: unsupported second-form X87 instruction
+OUTSB: unsupported opcode: non uniform memory access
+OUTSL: unsupported opcode: non uniform memory access
+OUTSW: unsupported opcode: non uniform memory access
+POP16r: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POP16rmm: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POP16rmr: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POP2: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POP2P: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POP64r: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POP64rmm: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POP64rmr: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POPF16: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POPF64: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POPFS16: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POPFS64: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POPGS16: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POPGS64: unsupported opcode: Push/Pop/AdjCallStack/Leave
+POPP64r: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PROBED_ALLOCA_32: Unsupported opcode: isPseudo/usesCustomInserter
+PROBED_ALLOCA_64: Unsupported opcode: isPseudo/usesCustomInserter
+PTCMMIMFP16PS: Unsupported opcode: isPseudo/usesCustomInserter
+PTCMMIMFP16PSV: unsupported opcode: pseudo instruction
+PTCMMRLFP16PS: Unsupported opcode: isPseudo/usesCustomInserter
+PTCMMRLFP16PSV: unsupported opcode: pseudo instruction
+PTDPBF16PS: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPBSSD: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPBSUD: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPBUSD: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPBUUD: Unsupported opcode: isPseudo/usesCustomInserter
+PTDPFP16PS: Unsupported opcode: isPseudo/usesCustomInserter
+PTILELOADD: Unsupported opcode: isPseudo/usesCustomInserter
+PTILELOADDT1: Unsupported opcode: isPseudo/usesCustomInserter
+PTILESTORED: Unsupported opcode: isPseudo/usesCustomInserter
+PTILEZERO: Unsupported opcode: isPseudo/usesCustomInserter
+PUSH16i: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH16i8: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH16r: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH16rmm: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH16rmr: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH2: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH2P: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH64i32: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH64i8: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH64r: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH64rmm: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSH64rmr: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSHF16: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSHF64: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSHFS16: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSHFS64: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSHGS16: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSHGS64: unsupported opcode: Push/Pop/AdjCallStack/Leave
+PUSHP64r: unsupported opcode: Push/Pop/AdjCallStack/Leave
+RET: Unsupported opcode: isCall/isReturn
+RET16: Unsupported opcode: isCall/isReturn
+RET64: Unsupported opcode: isCall/isReturn
+RETI16: Unsupported opcode: isCall/isReturn
+RETI64: Unsupported opcode: isCall/isReturn
+SCASB: Infeasible : memory instruction uses scratch memory register
+SCASL: Infeasible : memory instruction uses scratch memory register
+SCASQ: Infeasible : memory instruction uses scratch memory register
+SCASW: Infeasible : memory instruction uses scratch memory register
+SEG_ALLOCA_32: Unsupported opcode: isPseudo/usesCustomInserter
+SEG_ALLOCA_64: Unsupported opcode: isPseudo/usesCustomInserter
+SQRT_Fp32: unsupported opcode: pseudo instruction
+SQRT_Fp64: unsupported opcode: pseudo instruction
+SQRT_Fp80: unsupported opcode: pseudo instruction
+STACKALLOC_W_PROBING: unsupported opcode: pseudo instruction
+STOSB: Infeasible : memory instruction uses scratch memory register
+STOSL: Infeasible : memory instruction uses scratch memory register
+STOSQ: Infeasible : memory instruction uses scratch memory register
+STOSW: Infeasible : memory instruction uses scratch memory register
+ST_FPrr: unsupported second-form X87 instruction
+ST_Fp32m: unsupported opcode: pseudo instruction
+ST_Fp64m: unsupported opcode: pseudo instruction
+ST_Fp64m32: unsupported opcode: pseudo instruction
+ST_Fp80m32: unsupported opcode: pseudo instruction
+ST_Fp80m64: unsupported opcode: pseudo instruction
+ST_FpP32m: unsupported opcode: pseudo instruction
+ST_FpP64m: unsupported opcode: pseudo instruction
+ST_FpP64m32: unsupported opcode: pseudo instruction
+ST_FpP80m: unsupported opcode: pseudo instruction
+ST_FpP80m32: unsupported opcode: pseudo instruction
+ST_FpP80m64: unsupported opcode: pseudo instruction
+ST_Frr: unsupported second-form X87 instruction
+SUBR_FPrST0: unsupported second-form X87 instruction
+SUBR_FST0r: unsupported second-form X87 instruction
+SUBR_Fp32m: unsupported opcode: pseudo instruction
+SUBR_Fp64m: unsupported opcode: pseudo instruction
+SUBR_Fp64m32: unsupported opcode: pseudo instruction
+SUBR_Fp80m32: unsupported opcode: pseudo instruction
+SUBR_Fp80m64: unsupported opcode: pseudo instruction
+SUBR_FpI16m32: unsupported opcode: pseudo instruction
+SUBR_FpI16m64: unsupported opcode: pseudo instruction
+SUBR_FpI16m80: unsupported opcode: pseudo instruction
+SUBR_FpI32m32: unsupported opcode: pseudo instruction
+SUBR_FpI32m64: unsupported opcode: pseudo instruction
+SUBR_FpI32m80: unsupported opcode: pseudo instruction
+SUBR_FrST0: unsupported second-form X87 instruction
+SUB_FPrST0: unsupported second-form X87 instruction
+SUB_FST0r: unsupported second-form X87 instruction
+SUB_Fp32: unsupported opcode: pseudo instruction
+SUB_Fp32m: unsupported opcode: pseudo instruction
+SUB_Fp64: unsupported opcode: pseudo instruction
+SUB_Fp64m: unsupported opcode: pseudo instruction
+SUB_Fp64m32: unsupported opcode: pseudo instruction
+SUB_Fp80: unsupported opcode: pseudo instruction
+SUB_Fp80m32: unsupported opcode: pseudo instruction
+SUB_Fp80m64: unsupported opcode: pseudo instruction
+SUB_FpI16m32: unsupported opcode: pseudo instruction
+SUB_FpI16m64: unsupported opcode: pseudo instruction
+SUB_FpI16m80: unsupported opcode: pseudo instruction
+SUB_FpI32m32: unsupported opcode: pseudo instruction
+SUB_FpI32m64: unsupported opcode: pseudo instruction
+SUB_FpI32m80: unsupported opcode: pseudo instruction
+SUB_FrST0: unsupported second-form X87 instruction
+SYSENTER: unsupported opcode
+TAILJMPd: Unsupported opcode: isCall/isReturn
+TAILJMPd64: Unsupported opcode: isCall/isReturn
+TAILJMPd64_CC: Unsupported opcode: isBranch/isIndirectBranch
+TAILJMPd_CC: Unsupported opcode: isBranch/isIndirectBranch
+TAILJMPm: Unsupported opcode: isCall/isReturn
+TAILJMPm64: Unsupported opcode: isCall/isReturn
+TAILJMPm64_REX: Unsupported opcode: isCall/isReturn
+TAILJMPr: Unsupported opcode: isCall/isReturn
+TAILJMPr64: Unsupported opcode: isCall/isReturn
+TAILJMPr64_REX: Unsupported opcode: isCall/isReturn
+TCRETURNdi: Unsupported opcode: isCall/isReturn
+TCRETURNdi64: Unsupported opcode: isCall/isReturn
+TCRETURNdi64cc: Unsupported opcode: isBranch/isIndirectBranch
+TCRETURNdicc: Unsupported opcode: isBranch/isIndirectBranch
+TCRETURNmi: Unsupported opcode: isCall/isReturn
+TCRETURNmi64: Unsupported opcode: isCall/isReturn
+TCRETURNri: Unsupported opcode: isCall/isReturn
+TCRETURNri64: Unsupported opcode: isCall/isReturn
+TILELOADD: Unknown FormMask value
+TILELOADDT1: Unknown FormMask value
+TILELOADDT1_EVEX: Unknown FormMask value
+TILELOADD_EVEX: Unknown FormMask value
+TILESTORED: Unknown FormMask value
+TILESTORED_EVEX: Unknown FormMask value
+TLSCall_64: Unsupported opcode: isPseudo/usesCustomInserter
+TLS_addr64: Unsupported opcode: isPseudo/usesCustomInserter
+TLS_addrX32: Unsupported opcode: isPseudo/usesCustomInserter
+TLS_base_addr64: Unsupported opcode: isPseudo/usesCustomInserter
+TLS_base_addrX32: Unsupported opcode: isPseudo/usesCustomInserter
+TLS_desc32: Unsupported opcode: isPseudo/usesCustomInserter
+TLS_desc64: Unsupported opcode: isPseudo/usesCustomInserter
+TST_Fp32: unsupported opcode: pseudo instruction
+TST_Fp64: unsupported opcode: pseudo instruction
+TST_Fp80: unsupported opcode: pseudo instruction
+UBSAN_UD1: unsupported opcode: pseudo instruction
+UCOM_FIPr: unsupported second-form X87 instruction
+UCOM_FIr: unsupported second-form X87 instruction
+UCOM_FPr: unsupported second-form X87 instruction
+UCOM_FpIr32: unsupported opcode: pseudo instruction
+UCOM_FpIr64: unsupported opcode: pseudo instruction
+UCOM_FpIr80: unsupported opcode: pseudo instruction
+UCOM_Fpr32: unsupported opcode: pseudo instruction
+UCOM_Fpr64: unsupported opcode: pseudo instruction
+UCOM_Fpr80: unsupported opcode: pseudo instruction
+UCOM_Fr: unsupported second-form X87 instruction
+VAARG_64: Unsupported opcode: isPseudo/usesCustomInserter
+VAARG_X32: Unsupported opcode: isPseudo/usesCustomInserter
+VASTART_SAVE_XMM_REGS: unsupported opcode: pseudo instruction
+WRFSBASE: unsupported opcode
+WRFSBASE64: unsupported opcode
+XAM_Fp32: unsupported opcode: pseudo instruction
+XAM_Fp64: unsupported opcode: pseudo instruction
+XAM_Fp80: unsupported opcode: pseudo instruction
+XBEGIN: Unsupported opcode: isPseudo/usesCustomInserter
+XBEGIN_2: Unsupported opcode: isBranch/isIndirectBranch
+XBEGIN_4: Unsupported opcode: isBranch/isIndirectBranch
+XCH_F: unsupported second-form X87 instruction

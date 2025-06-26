@@ -75,6 +75,7 @@ def mov_size(typ: Union[str, None]) -> str:
 
 class AssemblyEmitter:
     """
+    Base class for emitting assembly instruction
     """
     def __init__(self):
         self.instructions = []
@@ -149,7 +150,10 @@ class AssemblyEmitter:
 
         def add_comparison_instruction1(c):
             """
-            TODO 
+            parses:
+                - "rax < 12",
+                - "rax <= 13",
+                
             """
             assert len(c) == 3
             l, h = 0, c[2].children[0]
@@ -163,12 +167,17 @@ class AssemblyEmitter:
 
         def add_comparison_instruction2(c1, c2):
             """
-            TODO 
+            parses:
+                - "0 <= rax < 7",
+                - "0 < rax < 7",
+                - "7 > rax >= 0",
             """
             assert len(c1) == 3
             assert len(c2) == 3
-            if ">" in c1[1].value: assert ">" in c2[1].value
-            if "<" in c1[1].value: assert "<" in c2[1].value
+            if ">" in c1[1].value: 
+                assert ">" in c2[1].value
+            if "<" in c1[1].value:
+                assert "<" in c2[1].value
             assert c1[2].children[0] == c2[0].children[0]
 
             register = c1[2].children[0]
@@ -195,17 +204,17 @@ class AssemblyEmitter:
         """
         parses:
             -"rax = *4",
+
         """
         r1, r2 = self.__memory_allocation(register, self.min_memory_offset)
         r3 = f"MOV [{register}], {value};"
         self.instructions.append(r1)
         self.instructions.append(r2)
         self.instructions.append(r3)
-        return
 
     def add_array_instruction(self,
                               register: str,
-                              size: Union[int],
+                              size: Union[int, List[int]],
                               init_value = None):
         """
         parses
@@ -221,9 +230,7 @@ class AssemblyEmitter:
 
         # TODO zero initialization not implemented
         if init_value is not None:
-            pass
-
-        return
+            raise NotImplementedError()
 
 @v_args(inline=True)
 class EvalTransformer(Transformer):
