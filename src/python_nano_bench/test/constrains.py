@@ -17,7 +17,7 @@ def test_simple():
         "7 > rax >= 0",
         "rax = *4",
         "rax = [17]",
-        "rax = [0;17]",
+        "rax = [0;17]", # TODO only zero supported
         "rax = [0u8;17]",
         "rax = [0u32;17]",
 
