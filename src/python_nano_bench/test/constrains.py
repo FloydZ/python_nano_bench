@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""
-tests the constraints helper file
-"""
+""" tests the constraints helper file """
 
 from python_nano_bench.constraints import parse_constrains
+
 
 def test_simple():
     """
@@ -22,9 +21,11 @@ def test_simple():
         "rax = [0u8;17]",
         "rax = [0u32;17]",
 
-        #"ymm0 = [0u64, 1,2,3]", # TODO
-        #"rbx < rax", # TODO
+        # TODO
+        # "ymm0 = [0u64,1,2,3]",
+        # "rbx < rax", 
     ]
+
     for expr in tests:
         tree = parse_constrains(expr)
         print(f"{expr}  =>  {tree}")

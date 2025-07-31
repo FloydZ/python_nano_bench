@@ -257,16 +257,60 @@ class AssemblyEmitter:
         :param size: size of the array in bytes or as a list
         :param init_value: optional initialization value for array elements
         :return: None
-        :raises NotImplementedError: if init_value is provided (initialization not implemented)
         """
         # easy case:  "rax = [17]"
         r1, r2 = self.__memory_allocation(register, size)
         self.instructions.append(r1)
         self.instructions.append(r2)
 
-        # Zero initialization not yet implemented
+        # Initialize array if init_value is provided
         if init_value is not None:
-            raise NotImplementedError("Array initialization not implemented")
+            # Check if init_value is a typed value
+            value = init_value
+            type_suffix = None
+            
+            if isinstance(init_value, tuple):
+                if init_value[0] == 'typed_value':
+                    value, type_suffix = init_value[1], init_value[2]
+            
+            size_spec = mov_size(type_suffix)
+            element_size = get_type_size(type_suffix)
+
+            # If value is 0, we can use special zero initialization with byte operations
+            if value == 0:
+                temp_reg = 'rcx'
+                
+                if temp_reg not in self.free_regs:
+                    # Find another free register
+                    for reg in self._free_regs:
+                        if reg in self.free_regs:
+                            temp_reg = reg
+                            break
+                
+                # Calculate total size in bytes
+                if isinstance(size, list):
+                    # If it's an array, use the size directly
+                    total_bytes = size[0]
+                else:
+                    # Otherwise, use the size as is
+                    total_bytes = size
+               
+                assert total_bytes > 0
+
+                self.instructions.append(f"push {temp_reg};")
+                self.instructions.append(f"xor al, al;")
+                self.instructions.append(f"mov {temp_reg}, {total_bytes};")
+                loop_label = f"zero_init_loop_{len(self.instructions)}"
+                self.instructions.append(f"{loop_label}:")
+                
+                # Store zero byte at current position (always using byte operations)
+                self.instructions.append(f"mov BYTE PTR [{register} + {temp_reg}], al;")
+                
+                # Check if counter is still > 0
+                self.instructions.append(f"dec {temp_reg};")
+                self.instructions.append(f"jnz {loop_label};")
+                self.instructions.append(f"pop {temp_reg};")
+
 
 @v_args(inline=True)
 class EvalTransformer(Transformer):
@@ -300,7 +344,8 @@ class EvalTransformer(Transformer):
                 return self.emitter.add_array_instruction(register, val[1][0])
             if val[0] == "array_repeat":
                 assert len(val) == 3
-                return self.emitter.add_array_instruction(register, val[2], val[1][1])
+                # Pass the appropriate values to add_array_instruction
+                return self.emitter.add_array_instruction(register, val[2], val[1])
         return self.emitter.add_assignment_instruction(register, val)
 
     def comparison(self, *args):

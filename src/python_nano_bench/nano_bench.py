@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """ wrapper around the `./nanoBench` command """
+
 import os
 import pprint
 import re
@@ -23,9 +24,9 @@ PFC_STOP_ASM = '.quad 0xF0B513B1C2813F04'
 instruction_set = read_instruction_set()
 
 class NanoBench:
-    """
-    wrapper around ./nanoBench
-    """
+    """ wrapper around ./nanoBench """
+
+    # TODO support more architectures
     __micro_arch =  ['SNB', 'IVB', 'HSW', 'BDW', 'SKL', 'SKX', 'CLX', 'KBL',
                      'CFL', 'CNL', 'ADL-P', 'ADL-E']
     march_translation = {
