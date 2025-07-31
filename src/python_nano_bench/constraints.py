@@ -40,8 +40,8 @@ NAME: /[a-zA-Z_][a-zA-Z0-9_]*/
 
 
 def get_type_size(typ: Union[str, None]) -> int:
-    """
-    default to 8 bytes (like native int)
+    """ default to 8 bytes (like native int)
+
     :param typ: in type
     :return size of the type in bytes
     """
@@ -60,8 +60,10 @@ def get_type_size(typ: Union[str, None]) -> int:
 
 
 def mov_size(typ: Union[str, None]) -> str:
-    """
-    TODO
+    """ Convert type to assembly size specifier
+
+    :param typ: in type
+    :return: assembly size specifier (BYTE, WORD, DWORD, or QWORD)
     """
     if typ is None:
         typ = ""
@@ -73,11 +75,16 @@ def mov_size(typ: Union[str, None]) -> str:
     }.get(typ, 'QWORD')
 
 
+# pylint: disable=too-many-instance-attributes
 class AssemblyEmitter:
     """
     Base class for emitting assembly instruction
     """
     def __init__(self):
+        """ Initialize assembly emitter with default configuration
+
+        :return: new AssemblyEmitter instance
+        """
         self.instructions = []
         # min bytes to allocate
         self.min_memory_offset = 8
@@ -108,8 +115,11 @@ class AssemblyEmitter:
     def __memory_allocation(self,
                             register: str,
                             nr_bytes: int):
-        """
-            TODO
+        """ Allocate memory and generate instructions to set register to point to it
+
+        :param register: target register to hold memory address
+        :param nr_bytes: number of bytes to allocate
+        :return: list of assembly instructions
         """
         # increase the offset for the next allocation
         nr_bytes = max(nr_bytes, self.min_memory_offset)
@@ -123,12 +133,15 @@ class AssemblyEmitter:
     def add_assignment_instruction(self,
                                    register: str,
                                    value: Union[str, int]):
-        """
-        emits instructions like:
-            mov {register}, {value}
+        """ Emit instruction to assign value to register
+
+        Emits instructions like: mov {register}, {value}
         NOTE: this class keeps track of which registers are already used
+
         :param register: name of the register
-        :param value: value to set the register to.
+        :param value: value to set the register to
+        :return: None
+        :raises ValueError: if register is not free
         """
         if register not in self.free_regs:
             raise ValueError(f"{register} is not free")
@@ -138,22 +151,29 @@ class AssemblyEmitter:
 
     def add_comparison_instruction(self,
                                    comparisons: List[Any]):
-        """
-        parses:
-            - "rax < 12",
-            - "rax <= 13",
-            - "0 <= rax < 7",
-            - "0 < rax < 7",
-            - "7 > rax >= 0",
+        """ Process comparison expressions and emit instructions to satisfy them
+
+        Handles expressions such as:
+            - "rax < 12"
+            - "rax <= 13"
+            - "0 <= rax < 7"
+            - "0 < rax < 7"
+            - "7 > rax >= 0"
+
+        :param comparisons: list of comparison tuples (left, operator, right)
+        :return: result of adding appropriate assignment instruction
         """
         assert 1 <= len(comparisons) <= 2
 
         def add_comparison_instruction1(c):
-            """
-            parses:
-                - "rax < 12",
-                - "rax <= 13",
-                
+            """ Process a single comparison expression
+
+            Handles expressions such as:
+                - "rax < 12"
+                - "rax <= 13"
+            
+            :param c: comparison tuple (left, operator, right)
+            :return: result of adding appropriate assignment instruction
             """
             assert len(c) == 3
             l, h = 0, c[2].children[0]
@@ -166,15 +186,20 @@ class AssemblyEmitter:
             return self.add_assignment_instruction(register, value)
 
         def add_comparison_instruction2(c1, c2):
-            """
-            parses:
-                - "0 <= rax < 7",
-                - "0 < rax < 7",
-                - "7 > rax >= 0",
+            """ Process a double comparison expression (chained comparisons)
+
+            Handles expressions such as:
+                - "0 <= rax < 7"
+                - "0 < rax < 7"
+                - "7 > rax >= 0"
+            
+            :param c1: first comparison tuple (left, operator, right)
+            :param c2: second comparison tuple (left, operator, right)
+            :return: result of adding appropriate assignment instruction
             """
             assert len(c1) == 3
             assert len(c2) == 3
-            if ">" in c1[1].value: 
+            if ">" in c1[1].value:
                 assert ">" in c2[1].value
             if "<" in c1[1].value:
                 assert "<" in c2[1].value
@@ -201,10 +226,14 @@ class AssemblyEmitter:
     def add_dereference_instruction(self,
                                    register: str,
                                    value: Union[str, int]):
-        """
-        parses:
-            -"rax = *4",
+        """ Process dereference expressions and emit instructions
 
+        Handles expressions such as:
+            - "rax = *4"
+        
+        :param register: register to store the result in
+        :param value: value to be dereferenced
+        :return: None
         """
         r1, r2 = self.__memory_allocation(register, self.min_memory_offset)
         r3 = f"MOV [{register}], {value};"
@@ -216,37 +245,52 @@ class AssemblyEmitter:
                               register: str,
                               size: Union[int, List[int]],
                               init_value = None):
-        """
-        parses
-            - "rax = [17]",
-            - "rax = [0;17]",
-            - "rax = [0u8;17]",
-            - "rax = [0u32;17]",
+        """ Process array expressions and emit instructions
+
+        Handles expressions such as:
+            - "rax = [17]"
+            - "rax = [0;17]"
+            - "rax = [0u8;17]"
+            - "rax = [0u32;17]"
+        
+        :param register: register to store the array pointer in
+        :param size: size of the array in bytes or as a list
+        :param init_value: optional initialization value for array elements
+        :return: None
+        :raises NotImplementedError: if init_value is provided (initialization not implemented)
         """
         # easy case:  "rax = [17]"
         r1, r2 = self.__memory_allocation(register, size)
         self.instructions.append(r1)
         self.instructions.append(r2)
 
-        # TODO zero initialization not implemented
+        # Zero initialization not yet implemented
         if init_value is not None:
-            raise NotImplementedError()
+            raise NotImplementedError("Array initialization not implemented")
 
 @v_args(inline=True)
 class EvalTransformer(Transformer):
+    """Transformer for evaluating and transforming constraints."""
     def __init__(self, emitter: AssemblyEmitter):
+        """ Initialize the transformer with an assembly emitter
+
+        :param emitter: the assembly emitter to use
+        :return: None
+        """
         super().__init__()
         self.emitter = emitter
 
     def assign(self,
                register: str,
                val):
-        """ parses: something like:
-            ```
-                rax = 4
-            ```
+        """ Process assignment expressions
+
+        Parses expressions like:
+            rax = 4
+        
         :param register: name of the register
         :param val: value to move into the register
+        :return: result of calling appropriate instruction method
         """
         val = val.children[0]
         if isinstance(val, tuple):
@@ -260,7 +304,11 @@ class EvalTransformer(Transformer):
         return self.emitter.add_assignment_instruction(register, val)
 
     def comparison(self, *args):
-        """ TODO explain"""
+        """ Process comparison expressions
+
+        :param args: variable list of arguments (val1, op1, val2, op2, val3, ...)
+        :return: result of calling emitter's add_comparison_instruction
+        """
         # args = val1, op1, val2, op2, val3, ...
         comparisons = []
         left = self.atom(args[0])
@@ -274,48 +322,88 @@ class EvalTransformer(Transformer):
         return self.emitter.add_comparison_instruction(comparisons)
 
     def comp_op(self, op):
-        """ TODO """
+        """ Process comparison operator
+
+        :param op: the operator token
+        :return: string representation of the operator
+        """
         return str(op)
 
     def deref(self, val):
-        """ TODO """
+        """ Process dereference operation
+
+        :param val: the value to dereference
+        :return: tuple ('deref', value)
+        """
         return 'deref', val
 
     def array(self, *args):
-        """ TODO """
+        """ Process array declaration
+
+        :param args: variable arguments - either single size or (init, length)
+        :return: tuple with array information
+        :raises ValueError: if invalid array syntax
+        """
         if len(args) == 1:
             # e.g., [17]
             return 'array', [args[0]]
-        elif len(args) == 2:
+        if len(args) == 2:
             init, length = args
             # e.g., [0; 17], [0u8, 17]
             return 'array_repeat', init, length
-        else:
-            raise ValueError("Invalid array syntax")
+        raise ValueError("Invalid array syntax")
 
     def typed_atom(self, val, typ=None):
-        """ TODO """
+        """ Process typed values
+
+        :param val: the value
+        :param typ: optional type suffix (u8, u16, etc.)
+        :return: tuple ('typed_value', value, type)
+        """
         return 'typed_value', val, typ if typ else None
 
+    # pylint: disable=invalid-name
     def TYPE_SUFFIX(self, token):
-        """ TODO """
+        """ Process type suffix tokens
+
+        :param token: the type suffix token
+        :return: string representation of the token
+        """
         return str(token)
 
     def atom(self, val):
-        """ TODO """
+        """ Process atomic values
+
+        :param val: the atomic value
+        :return: the value unchanged
+        """
         return val
 
+    # pylint: disable=invalid-name
     def NAME(self, token):
-        """ TODO """
+        """ Process name tokens
+
+        :param token: the name token
+        :return: string representation of the token
+        """
         return str(token)
 
+    # pylint: disable=invalid-name
     def SIGNED_NUMBER(self, token):
-        """ TODO """
+        """ Process signed number tokens
+
+        :param token: the number token
+        :return: integer value of the token
+        """
         return int(token)
 
 
 def parse_constrains(text: str):
-    """ TODO """
+    """ Parse constraints and generate assembly instructions
+
+    :param text: the constraint text to parse
+    :return: list of generated assembly instructions
+    """
     a = AssemblyEmitter()
     parser = Lark(GRAMMAR, parser='lalr', transformer=EvalTransformer(a))
     _ = parser.parse(text)

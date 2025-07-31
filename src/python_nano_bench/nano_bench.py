@@ -10,6 +10,9 @@ from shutil import copyfile
 from subprocess import PIPE, STDOUT, Popen
 from typing import List, Tuple, Union
 
+from opcodes.x86 import read_instruction_set
+from python_nano_bench.constraints import parse_constrains
+
 from .asm import Asm
 from .cpuid.cpuid import CPUID, micro_arch
 from .elevate import Elevate, elevate
@@ -17,11 +20,7 @@ from .elevate import Elevate, elevate
 PFC_START_ASM = '.quad 0xE0B513B1C2813F04'
 PFC_STOP_ASM = '.quad 0xF0B513B1C2813F04'
 
-
-from opcodes.x86 import read_instruction_set
 instruction_set = read_instruction_set()
-
-from python_nano_bench.constraints import parse_constrains
 
 class NanoBench:
     """
@@ -43,11 +42,12 @@ class NanoBench:
 
     def __init__(self, ignore_self_parsed_init=False):
         """
-        :param ignore_self_parsed_init: If true the class will ignore register initialization code itself detected
+        :param ignore_self_parsed_init: If true the class will ignore register initialization code 
+        itself detected
         while parsing the assembly. For example while parsing:
             "vpaddb ymm0, ymm1, ymm0; vpaddb ymm1, ymm0, ymmword ptr [rax];"
-        this class will detect that `rax` is a memory dependency, hence will make sure that 'rax' points to valid mem.
-        But sometimes this is undesired behaviour.
+        this class will detect that `rax` is a memory dependency, hence will make sure that 'rax' 
+        points to valid memory. But sometimes this is undesired behaviour.
         """
         self._elevate = Elevate()
 
@@ -81,6 +81,11 @@ class NanoBench:
         self._df = False
         self._fixed_counters = False
         self._basic_mode = False
+        self._user = False
+
+        # Attributes previously defined outside __init__
+        self.prev_rdpmc = None
+        self.prev_nmi_watchdog = None
 
         # string
         self._code_one_time_init = False
@@ -110,8 +115,8 @@ class NanoBench:
         """
         try:
             march = NanoBench.march_translation[march]
-        except:
-            print("ERROR could not find you arch, fall back to Zen")
+        except KeyError:
+            print("ERROR could not find your arch, fall back to Zen")
             march = "Zen"
         return f"./configs/cfg_{march}_all.txt"
         #return f"deps/nanoBench/configs/cfg_{march}_all_core.txt"
@@ -293,7 +298,7 @@ class NanoBench:
             return False
 
     @staticmethod
-    def createBinaryFile(target_file: str, asm: Union[str, None] = None,
+    def create_binary_file(target_file: str, asm: Union[str, None] = None,
                          obj_file: Union[str, None] = None,
                          bin_file: Union[str, None] = None) -> bool:
         """
@@ -316,34 +321,34 @@ class NanoBench:
         return False
 
     @staticmethod
-    def getR14Size() -> int:
+    def get_r14_size() -> int:
         """
         NOTE: only available if the kernel module is loaded.
         :return the size in bytes.
         """
-        if not hasattr(NanoBench.getR14Size, 'r14Size'):
+        if not hasattr(NanoBench.get_r14_size, 'r14Size'):
             with open('/sys/nb/r14_size', encoding="utf-8") as f:
                 line = f.readline()
                 mb = int(line.split()[2])
-                NanoBench.getR14Size.r14Size = mb * 1024 * 1024
-        return NanoBench.getR14Size.r14Size
+                NanoBench.get_r14_size.r14Size = mb * 1024 * 1024
+        return NanoBench.get_r14_size.r14Size
 
     @staticmethod
-    def getAddress(reg) -> str:
+    def get_address(reg) -> str:
         """ Returns the address that is stored in R14, RDI, RSI, RBP, or RSP 
         as a hex string.
         NOTE: only available if the kernel module is loaded
         :param reg: register name
         """
-        with open('/sys/nb/addresses') as f:
+        with open('/sys/nb/addresses', encoding="utf-8") as f:
             for line in f:
-                lReg, addr = line.strip().split(': ')
-                if reg.upper() == lReg:
+                l_reg, addr = line.strip().split(': ')
+                if reg.upper() == l_reg:
                     return addr
         raise ValueError('Register/Address not found')
 
     @staticmethod
-    def is_HT_enabled() -> bool:
+    def is_ht_enabled() -> bool:
         """ checks whether hyper threading is enabled
         : returns true/False if HT is enabled or not
         """
@@ -351,12 +356,12 @@ class NanoBench:
         try:
             t = int(t)
             return t != 0
-        except Exception as e:
+        except (ValueError, TypeError) as e:
             print("cannot read the SMT state", e)
             return False
 
     @staticmethod
-    def set_HT(state: int) -> bool:
+    def set_ht(state: int) -> bool:
         """ NOTE: Needs root rights
         :param state: either 0 for disable HT
                           or 1 to enable HT
@@ -388,7 +393,7 @@ class NanoBench:
         NanoBench.write_file(filename="/sys/bus/event_source/devices/cpu",
                              content="2", root=True)
 
-        NanoBench.run_command(["modprobe", "--first-time" 'msr'], root=True)
+        NanoBench.run_command(["modprobe", "--first-time", "msr"], root=True)
 
         # (Temporarily) disable watchdogs, see https://github.com/obilaniu/libpfc
         NanoBench.run_command(["modprobe", "--first-time", "-r", "iTCO_wdt"],
@@ -441,7 +446,8 @@ class NanoBench:
             cmd += ["-verbose"]
         # note supported by user
         if kernel:
-            if self._remove_empty_events: cmd += "-remove_empty_events"
+            if self._remove_empty_events:
+                cmd += "-remove_empty_events"
 
         if self._no_mem:
             cmd += ["-no_mem"]
@@ -485,7 +491,7 @@ class NanoBench:
             cmd += "-basic_mode"
 
         # strings
-        if len(self._asm_init):
+        if self._asm_init:
             t = "-asm_init=\""
             if len(init_asm) > 0 and not self._ignore_self_parsed_init:
                 t +=init_asm

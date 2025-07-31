@@ -1,20 +1,13 @@
 #!/usr/bin/env python3
-""" """
+""" Module for CPU feature detection using CPUID instruction """
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2022 Andreas Abel
-#
 # This file was modified from https://github.com/flababah/cpuid.py
-#
 # Original license and copyright notice:
-#
 #    The MIT License (MIT)
-#
 #    Copyright (c) 2014 Anders Høst
 #
-#    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-#    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-#    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import collections
 import ctypes
@@ -138,15 +131,17 @@ is_windows = os.name == "nt"
 is_64bit = ctypes.sizeof(ctypes.c_voidp) == 8
 
 
+# pylint: disable=invalid-name,too-few-public-methods
 class CPUID_struct(ctypes.Structure):
-    """ """
+    """ Structure to hold CPUID register values (eax, ebx, ecx, edx) """
 
     _fields_ = [(r, c_uint32) for r in ("eax", "ebx", "ecx", "edx")]
 
 
-class CPUID():
+class CPUID:
+    """ Class to execute the CPUID instruction from Python """
     def __init__(self):
-        """ """
+        """ Initialize the CPUID functionality by setting up memory for execution """
         if platform.machine() not in ("AMD64", "x86_64", "x86", "i686"):
             raise SystemError("Only available for x86")
 
@@ -199,17 +194,19 @@ class CPUID():
         func_type = CFUNCTYPE(None, POINTER(CPUID_struct), c_uint32, c_uint32)
         self.func_ptr = func_type(self.addr)
 
-    def __call__(self, eax, ecx=0):
+    def __call__(self, eax_value, ecx=0):
+        """ Execute CPUID instruction with given parameters
+        
+        :param eax_value: Value to place in EAX register before CPUID
+        :param ecx: Value to place in ECX register before CPUID
+        :return: Tuple of (eax, ebx, ecx, edx) register values after CPUID
         """
-        :param eax:
-        :param ecx:
-        """
-        struct = CPUID_struct()
-        self.func_ptr(struct, eax, ecx)
-        return struct.eax, struct.ebx, struct.ecx, struct.edx
+        cpu_struct = CPUID_struct()
+        self.func_ptr(cpu_struct, eax_value, ecx)
+        return cpu_struct.eax, cpu_struct.ebx, cpu_struct.ecx, cpu_struct.edx
 
     def __del__(self):
-        """"""
+        """ Cleanup allocated memory when object is destroyed """
         if is_windows:
             self.win.VirtualFree.restype = c_long
             self.win.VirtualFree.argtypes = [c_void_p, c_size_t, c_ulong]
@@ -223,16 +220,20 @@ class CPUID():
 
 
 def cpu_vendor(cpu):
-    """
-    :param cpu
+    """ Get CPU vendor string
+    
+    :param cpu: CPUID instance
+    :return: Vendor string (e.g., 'GenuineIntel' or 'AuthenticAMD')
     """
     _, b, c, d = cpu(0)
     return str(struct.pack("III", b, d, c).decode("ascii"))
 
 
 def cpu_name(cpu):
-    """
-    :param cpu:
+    """ Get CPU name string
+    
+    :param cpu: CPUID instance
+    :return: CPU name string
     """
     return " ".join(
         str(
@@ -252,19 +253,21 @@ VersionInfo = collections.namedtuple(
 
 
 def version_info(cpu):
-    """
-    :param cpu:
+    """ Get CPU version information
+    
+    :param cpu: CPUID instance
+    :return: VersionInfo named tuple with family, model, stepping and core type
     """
     a, _, _, _ = cpu(0x01)
 
-    family_ID = (a >> 8) & 0xF
+    family_id = (a >> 8) & 0xF
 
-    displ_family = family_ID
-    if family_ID == 0x0F:
+    displ_family = family_id
+    if family_id == 0x0F:
         displ_family += (a >> 20) & 0xFF
 
     displ_model = (a >> 4) & 0xF
-    if family_ID == 0x06 or family_ID == 0x0F:
+    if family_id in (0x06, 0x0F):
         displ_model += (a >> 12) & 0xF0
 
     stepping = a & 0xF
@@ -278,9 +281,12 @@ def version_info(cpu):
     )
 
 
+# pylint: disable=too-many-return-statements,too-many-branches
 def micro_arch(cpu):
-    """
-    :param cpu:
+    """ Determine CPU microarchitecture
+    
+    :param cpu: CPUID instance
+    :return: String representing the CPU microarchitecture
     """
     vi = version_info(cpu)
 
@@ -339,14 +345,12 @@ def micro_arch(cpu):
     if (vi.displ_family, vi.displ_model) in [(0x06, 0x55)]:
         if vi.stepping <= 0x4:
             return "SKX"
-        else:
-            return "CLX"
+        return "CLX"
     if (vi.displ_family, vi.displ_model) in [(0x06, 0x8E), (0x06, 0x9E)]:
-        # ODO: not sure if this is correct
+        # TODO: not sure if this is correct
         if vi.stepping <= 0x9:
             return "KBL"
-        else:
-            return "CFL"
+        return "CFL"
     if (vi.displ_family, vi.displ_model) in [(0x06, 0x66)]:
         return "CNL"
     if (vi.displ_family, vi.displ_model) in [(0x06, 0x7A)]:
@@ -384,6 +388,7 @@ def micro_arch(cpu):
 
 
 # See Table 3-12 (Encoding of CPUID Leaf 2 Descriptors) in Intel's Instruction Set Reference
+# pylint: disable=line-too-long
 leaf2_descriptors = {
     0x01: ("TLB", "Instruction TLB: 4 KByte pages, 4-way set associative, 32 entries"),
     0x02: ("TLB", "Instruction TLB: 4 MByte pages, fully associative, 2 entries"),
@@ -721,35 +726,47 @@ leaf2_descriptors = {
 
 # 0xAABBCCDD -> [0xDD, 0xCC, 0xBB, 0xAA]
 def get_bytes(reg):
-    """ 
-    :param reg:
+    """ Convert a 32-bit register value to a list of bytes
+    
+    :param reg: Register value
+    :return: List of bytes [byte0, byte1, byte2, byte3]
     """
     return [((reg >> s) & 0xFF) for s in range(0, 32, 8)]
 
 
 def get_bit(reg, bit):
-    """ 
-    :param reg:
-    :param bit:
+    """ Extract a specific bit from a register value
+    
+    :param reg: Register value
+    :param bit: Bit position to extract
+    :return: Value of the bit (0 or 1)
     """
     return (reg >> bit) & 1
 
 
-# Returns the bits between the indexes start and end (inclusive); start must be <= end
 def get_bits(reg, start, end):
-    """ 
-    :param reg:
-    :param start:
-    :param end:
+    """ Extract a range of bits from a register value
+    
+    Returns the bits between the indexes start and end (inclusive); start must be <= end
+    
+    :param reg: Register value
+    :param start: First bit position to extract
+    :param end: Last bit position to extract
+    :return: Value of the bits in range [start, end]
     """
     return (reg >> start) & ((1 << (end - start + 1)) - 1)
 
 
+# pylint: disable=too-many-locals,too-many-branches,too-many-statements
 def get_cache_info(cpu):
-    """ """
+    """ Retrieve CPU cache information
+    
+    :param cpu: CPUID instance
+    :return: Dictionary with cache information
+    """
     vendor = cpu_vendor(cpu)
 
-    cacheInfo = dict()
+    cache_info = {}
 
     if vendor == "GenuineIntel":
         log.info("\nCPUID Leaf 2 information:")
@@ -764,7 +781,7 @@ def get_cache_info(cpu):
                     continue  # least-significant byte in EAX
                 if byte == 0:
                     continue  # Null descriptor
-                log.info("  - " + leaf2_descriptors[byte][1])
+                log.info("  - %s", leaf2_descriptors[byte][1])
 
         log.info("\nCPUID Leaf 4 information:")
 
@@ -772,20 +789,20 @@ def get_cache_info(cpu):
         while True:
             a, b, c, d = cpu(0x04, index)
 
-            cacheType = ""
+            cache_type = ""
             bits3_0 = get_bits(a, 0, 3)
 
             if bits3_0 == 0:
                 break
             if bits3_0 == 1:
-                cacheType = "Data Cache"
+                cache_type = "Data Cache"
             if bits3_0 == 2:
-                cacheType = "Instruction Cache"
+                cache_type = "Instruction Cache"
             if bits3_0 == 3:
-                cacheType = "Unified Cache"
+                cache_type = "Unified Cache"
 
             level = get_bits(a, 5, 7)
-            log.info("  Level " + str(level) + " (" + cacheType + "):")
+            log.info("  Level %s (%s):", str(level), cache_type)
 
             parameters = []
             if get_bit(a, 8):
@@ -803,15 +820,15 @@ def get_cache_info(cpu):
                 "Maximum number of addressable IDs for processor cores in the physical package: "
                 + str(get_bits(a, 26, 31) + 1)
             )
-            L = int(get_bits(b, 0, 11) + 1)
-            P = int(get_bits(b, 12, 21) + 1)
-            W = int(get_bits(b, 22, 31) + 1)
-            S = int(c + 1)
-            parameters.append("System Coherency Line Size (L): " + str(L) + " B")
-            parameters.append("Physical Line partitions (P): " + str(P))
-            parameters.append("Ways of associativity (W): " + str(W))
-            parameters.append("Number of Sets (S): " + str(S))
-            parameters.append("Cache Size: " + str(W * P * L * S // 1024) + " kB")
+            line_size = int(get_bits(b, 0, 11) + 1)
+            partitions = int(get_bits(b, 12, 21) + 1)
+            ways = int(get_bits(b, 22, 31) + 1)
+            num_sets = int(c + 1)
+            parameters.append(f"System Coherency Line Size (L): {line_size} B")
+            parameters.append(f"Physical Line partitions (P): {partitions}")
+            parameters.append(f"Ways of associativity (W): {ways}")
+            parameters.append(f"Number of Sets (S): {num_sets}")
+            parameters.append(f"Cache Size: {ways * partitions * line_size * num_sets // 1024} kB")
 
             if get_bit(d, 0):
                 parameters.append(
@@ -827,22 +844,23 @@ def get_cache_info(cpu):
             else:
                 parameters.append("Cache is not inclusive of lower cache levels")
 
-            complexAddressing = False
+            complex_addressing = False
             if get_bit(d, 2):
-                complexAddressing = True
+                complex_addressing = True
                 parameters.append(
                     "A complex function is used to index the cache, potentially using all address bits"
                 )
 
-            cacheInfo[
-                "L" + str(level) + (cacheType[0] if cacheType[0] in ["D", "I"] else "")
-            ] = {"lineSize": L, "nSets": S, "assoc": W, "complex": complexAddressing}
+            cache_info[
+                "L" + str(level) + (cache_type[0] if cache_type[0] in ["D", "I"] else "")
+            ] = {"lineSize": line_size, "nSets": num_sets, "assoc": ways, "complex": complex_addressing}
 
             for par in parameters:
-                log.info("    - " + par)
+                log.info("    - %s", par)
 
             index += 1
     elif vendor == "AuthenticAMD":
+        # pylint: disable=invalid-name
         _, _, c, d = cpu(0x80000005)
 
         L1DcLineSize = int(get_bits(c, 0, 7))
@@ -850,12 +868,12 @@ def get_cache_info(cpu):
         L1DcAssoc = int(get_bits(c, 16, 23))
         L1DcSize = int(get_bits(c, 24, 31))
 
-        log.info("  L1DcLineSize: " + str(L1DcLineSize) + " B")
-        log.info("  L1DcLinesPerTag: " + str(L1DcLinesPerTag))
-        log.info("  L1DcAssoc: " + str(L1DcAssoc))
-        log.info("  L1DcSize: " + str(L1DcSize) + " kB")
+        log.info("  L1DcLineSize: %s B", str(L1DcLineSize))
+        log.info("  L1DcLinesPerTag: %s", str(L1DcLinesPerTag))
+        log.info("  L1DcAssoc: %s", str(L1DcAssoc))
+        log.info("  L1DcSize: %s kB", str(L1DcSize))
 
-        cacheInfo["L1D"] = {
+        cache_info["L1D"] = {
             "lineSize": L1DcLineSize,
             "nSets": L1DcSize * 1024 // L1DcAssoc // L1DcLineSize,
             "assoc": L1DcAssoc,
@@ -866,12 +884,12 @@ def get_cache_info(cpu):
         L1IcAssoc = int(get_bits(d, 16, 23))
         L1IcSize = int(get_bits(d, 24, 31))
 
-        log.info("  L1IcLineSize: " + str(L1IcLineSize) + " B")
-        log.info("  L1IcLinesPerTag: " + str(L1IcLinesPerTag))
-        log.info("  L1IcAssoc: " + str(L1IcAssoc))
-        log.info("  L1IcSize: " + str(L1IcSize) + " kB")
+        log.info("  L1IcLineSize: %s B", str(L1IcLineSize))
+        log.info("  L1IcLinesPerTag: %s", str(L1IcLinesPerTag))
+        log.info("  L1IcAssoc: %s", str(L1IcAssoc))
+        log.info("  L1IcSize: %s kB", str(L1IcSize))
 
-        cacheInfo["L1I"] = {
+        cache_info["L1I"] = {
             "lineSize": L1IcLineSize,
             "nSets": L1IcSize * 1024 // L1IcAssoc // L1IcLineSize,
             "assoc": L1IcAssoc,
@@ -907,12 +925,12 @@ def get_cache_info(cpu):
         elif c_15_12 == 0x2:
             L2Assoc = L2Size * 1024 // L2LineSize
 
-        log.info("  L2LineSize: " + str(L2LineSize) + " B")
-        log.info("  L2LinesPerTag: " + str(L2LinesPerTag))
-        log.info("  L2Assoc: " + str(L2Assoc))
-        log.info("  L2Size: " + str(L2Size) + " kB")
+        log.info("  L2LineSize: %s B", str(L2LineSize))
+        log.info("  L2LinesPerTag: %s", str(L2LinesPerTag))
+        log.info("  L2Assoc: %s", str(L2Assoc))
+        log.info("  L2Size: %s kB", str(L2Size))
 
-        cacheInfo["L2"] = {
+        cache_info["L2"] = {
             "lineSize": L2LineSize,
             "nSets": L2Size * 1024 // L2Assoc // L2LineSize,
             "assoc": L2Assoc,
@@ -948,32 +966,34 @@ def get_cache_info(cpu):
         elif d_15_12 == 0xE:
             L3Assoc = 128
 
-        log.info("  L3LineSize: " + str(L3LineSize) + " B")
-        log.info("  L3LinesPerTag: " + str(L3LinesPerTag))
-        log.info("  L3Assoc: " + str(L3Assoc))
-        log.info("  L3Size: " + str(L3Size // 1024) + " MB")
+        log.info("  L3LineSize: %s B", str(L3LineSize))
+        log.info("  L3LinesPerTag: %s", str(L3LinesPerTag))
+        log.info("  L3Assoc: %s", str(L3Assoc))
+        log.info("  L3Size: %s MB", str(L3Size // 1024))
 
-        cacheInfo["L3"] = {
+        cache_info["L3"] = {
             "lineSize": L3LineSize,
             "nSets": L3Size * 1024 // L3Assoc // L3LineSize,
             "assoc": L3Assoc,
         }
 
-    return cacheInfo
+    return cache_info
 
 
 def get_basic_info(cpu):
-    """
-    :param cpu:
+    """ Get basic CPU information as a formatted string
+    
+    :param cpu: CPUID instance
+    :return: Multi-line string with CPU information
     """
     strs = ["Vendor: " + cpu_vendor(cpu)]
     strs += ["CPU Name: " + cpu_name(cpu)]
     vi = version_info(cpu)
-    strs += ["Family: 0x%02X" % vi.displ_family]
-    strs += ["Model: 0x%02X" % vi.displ_model]
-    strs += ["Stepping: 0x%X" % vi.stepping]
+    strs += [f"Family: 0x{vi.displ_family:02X}"]
+    strs += [f"Model: 0x{vi.displ_model:02X}"]
+    strs += [f"Stepping: 0x{vi.stepping:X}"]
     if vi.core_type:
-        strs += ["Core Type: 0x%X" % vi.core_type]
+        strs += [f"Core Type: 0x{vi.core_type:X}"]
     strs += ["Microarchitecture: " + micro_arch(cpu)]
     return "\n".join(strs)
 
@@ -982,17 +1002,24 @@ if __name__ == "__main__":
     logging.basicConfig(stream=sys.stdout, format="%(message)s", level=logging.INFO)
     cpuid = CPUID()
 
+    # pylint: disable=redefined-outer-name
     def valid_inputs():
-        for eax in (0x0, 0x80000000):
-            highest, _, _, _ = cpuid(eax)
-            while eax <= highest:
-                regs = cpuid(eax)
-                yield (eax, regs)
-                eax += 1
+        """ Generator for valid CPUID input values 
+        
+        Yields:
+            tuple: (eax_value, (eax, ebx, ecx, edx)) for each valid CPUID input
+        """
+        for eax_val in (0x0, 0x80000000):
+            highest, _, _, _ = cpuid(eax_val)
+            current_eax = eax_val
+            while current_eax <= highest:
+                current_regs = cpuid(current_eax)
+                yield (current_eax, current_regs)
+                current_eax += 1
 
     print(" ".join(x.ljust(8) for x in ("CPUID", "A", "B", "C", "D")).strip())
     for eax, regs in valid_inputs():
-        print("%08x" % eax, " ".join("%08x" % reg for reg in regs))
+        print(f"{eax:08x}", " ".join(f"{reg:08x}" for reg in regs))
 
     print("")
     print(get_basic_info(cpuid))
