@@ -2,6 +2,7 @@
 """ tests the constraints helper file """
 
 from python_nano_bench.constraints import parse_constrains
+from python_nano_bench.constraints import Lark, GRAMMAR, EvalTransformer, AssemblyEmitter
 
 
 def test_simple():
@@ -16,18 +17,28 @@ def test_simple():
         "0 < rax < 7",
         "7 > rax >= 0",
         "rax = *4",
-        "rax = [17]",
-        "rax = [0;17]", # TODO only zero supported
+        "rax = [17u8]",
+        "rax = [17u8]",
+        "rax = [0;17]",
         "rax = [0u8;17]",
-        "rax = [0u32;17]",
-
-        # TODO
-        # "ymm0 = [0u64,1,2,3]",
-        # "rbx < rax", 
+        "rax = [1u32;17]",
+        "ymm0 = [0u64,1,2,3]",
     ]
-
     for expr in tests:
         tree = parse_constrains(expr)
+        print(f"{expr}  =>  {tree}")
+
+
+def test_complex():
+    """ test more complex/multi line examples
+    """
+    tests = [
+        "rax = 4",
+        "rbx < rax"
+    ]
+    emitter = AssemblyEmitter()
+    for expr in tests:
+        tree = parse_constrains(expr, emitter)
         print(f"{expr}  =>  {tree}")
 
 

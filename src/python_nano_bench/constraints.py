@@ -2,7 +2,7 @@
 """ constraint interface"""
 
 import random
-from typing import Any, List, Union
+from typing import Any, List, Union, Tuple
 from lark import Lark, Transformer, v_args
 
 
@@ -27,7 +27,7 @@ value: deref | array | atom
 
 deref: "*" atom
 
-array: "[" atom "]" | "[" typed_atom ";" atom "]"
+array: "[" typed_atom ";" atom "]" | "[" typed_atom ("," atom)+ "]" | "[" typed_atom "]"
 
 typed_atom: atom TYPE_SUFFIX?
 
@@ -75,6 +75,23 @@ def mov_size(typ: Union[str, None]) -> str:
     }.get(typ, 'QWORD')
 
 
+def _compute_size_typed_value(v: Union[int, Tuple[str, int, Union[str, None]]]):
+    """ compute the total size in bytes of a typed atom.
+    either int, or
+        ("typed_atom", number of values, None or type)
+    """
+    if isinstance(v, int):
+        return v * 8
+
+    if isinstance(v, Tuple):
+        type_size = 8
+        if v[2] is not None:
+            type_size = get_type_size(v[2])
+        return v[1] * type_size
+
+    raise ValueError("unknown type")
+
+
 # pylint: disable=too-many-instance-attributes
 class AssemblyEmitter:
     """
@@ -93,6 +110,9 @@ class AssemblyEmitter:
         # R14, RDI, RSI, RSP, and RBP are initialized with addresses in the
         # middle of dedicated memory areas (of 1 MB each),
         self.memory_register = "r14" # pointer to a valid memory region
+        # list of register allocations with their initial values
+        # format: [("rax", 0), ..., ("rbx", 10)
+        self._register_allocations = []
 
         self._free_regs = ["rax", "rbx", "rcx", "rdx", "r8", "r9", "r10", "r11",
                            "r12", "r13", "r15"]
@@ -111,6 +131,31 @@ class AssemblyEmitter:
         self.free_regs = self._free_regs + self._free_sse_regs + self._free_avx2_regs + \
                          self._free_avx512_regs
 
+    def __get_free_register(self):
+        """ returns a string containing the name of a free register """
+        for temp_reg in self._free_regs:
+            if temp_reg in self.free_regs:
+                self.free_regs.remove(temp_reg)
+                return temp_reg
+        raise ValueError("no free regs anymore")
+
+    def __add_register_allocation(self, register: str, value: int):
+        """
+        :param register: register name
+        :param value: integer value
+        :return nothing
+        """
+        self._register_allocations.append((register, value))
+
+    def __find_register_allocation(self, register: str) -> Union[None, int]:
+        """
+        :param register: register name
+        :return None if no register found, else the initial value
+        """
+        for r, v in self._register_allocations:
+            if register == r:
+                return v
+        return None
 
     def __memory_allocation(self,
                             register: str,
@@ -148,6 +193,7 @@ class AssemblyEmitter:
         self.free_regs.remove(register)
         t = f"mov {register}, {value};"
         self.instructions.append(t)
+        self.__add_register_allocation(register, value)
 
     def add_comparison_instruction(self,
                                    comparisons: List[Any]):
@@ -171,19 +217,42 @@ class AssemblyEmitter:
             Handles expressions such as:
                 - "rax < 12"
                 - "rax <= 13"
+                - "rbx < rax" (register-to-register comparison)
             
             :param c: comparison tuple (left, operator, right)
             :return: result of adding appropriate assignment instruction
             """
             assert len(c) == 3
-            l, h = 0, c[2].children[0]
-            if "=" not in c[1].value:
-                h -= 1
-            if ">" in c[1].value:
-                l, h = h, l
-            register = c[0].children[0]
-            value = random.randint(l, h)
-            return self.add_assignment_instruction(register, value)
+            
+            # Check if both sides are registers (register-to-register comparison)
+            left_is_reg = isinstance(c[0].children[0], str) and c[0].children[0] in self._free_regs + [self.memory_register]
+            right_is_reg = isinstance(c[2].children[0], str) and c[2].children[0] in self._free_regs + [self.memory_register]
+            
+            if left_is_reg and right_is_reg:
+                # Handle register-to-register comparison
+                left_reg, right_reg = c[0].children[0], c[2].children[0]
+                op = c[1].value
+
+                reg, nreg = right_reg, left_reg
+                if ">" in op:
+                    nreg, reg = reg, nreg
+
+                value = self.__find_register_allocation(reg)
+                if value is None:
+                    raise ValueError(f"{reg}, has no valid initialisation")
+
+                # Set both registers
+                return self.add_assignment_instruction(nreg, value)
+            else:
+                # Original code for register-constant comparison
+                l, h = 0, c[2].children[0] if isinstance(c[2].children[0], int) else 100
+                if "=" not in c[1].value:
+                    h -= 1
+                if ">" in c[1].value:
+                    l, h = h, l
+                register = c[0].children[0]
+                value = random.randint(l, h)
+                return self.add_assignment_instruction(register, value)
 
         def add_comparison_instruction2(c1, c2):
             """ Process a double comparison expression (chained comparisons)
@@ -224,8 +293,8 @@ class AssemblyEmitter:
         return add_comparison_instruction2(comparisons[0], comparisons[1])
 
     def add_dereference_instruction(self,
-                                   register: str,
-                                   value: Union[str, int]):
+                                    register: str,
+                                    value: Union[str, int]):
         """ Process dereference expressions and emit instructions
 
         Handles expressions such as:
@@ -243,8 +312,8 @@ class AssemblyEmitter:
 
     def add_array_instruction(self,
                               register: str,
-                              size: Union[int, List[int]],
-                              init_value = None):
+                              size: int,
+                              init_value: Union[int, Tuple[int, int], List[Any], None] = None):
         """ Process array expressions and emit instructions
 
         Handles expressions such as:
@@ -252,9 +321,10 @@ class AssemblyEmitter:
             - "rax = [0;17]"
             - "rax = [0u8;17]"
             - "rax = [0u32;17]"
-        
+            - "rax = [0u32,1,2,3,4]"
+
         :param register: register to store the array pointer in
-        :param size: size of the array in bytes or as a list
+        :param size: size of the array in bytes
         :param init_value: optional initialization value for array elements
         :return: None
         """
@@ -263,53 +333,31 @@ class AssemblyEmitter:
         self.instructions.append(r1)
         self.instructions.append(r2)
 
-        # Initialize array if init_value is provided
+        # hard case "rax = [0;17]"
         if init_value is not None:
             # Check if init_value is a typed value
             value = init_value
             type_suffix = None
             
-            if isinstance(init_value, tuple):
+            if isinstance(init_value, Tuple):
                 if init_value[0] == 'typed_value':
                     value, type_suffix = init_value[1], init_value[2]
-            
-            size_spec = mov_size(type_suffix)
+
+            # NOTE: `get_type_size` returns 8 if no type suffix is specified
             element_size = get_type_size(type_suffix)
 
-            # If value is 0, we can use special zero initialization with byte operations
-            if value == 0:
-                temp_reg = 'rcx'
-                
-                if temp_reg not in self.free_regs:
-                    # Find another free register
-                    for reg in self._free_regs:
-                        if reg in self.free_regs:
-                            temp_reg = reg
-                            break
-                
-                # Calculate total size in bytes
-                if isinstance(size, list):
-                    # If it's an array, use the size directly
-                    total_bytes = size[0]
-                else:
-                    # Otherwise, use the size as is
-                    total_bytes = size
-               
-                assert total_bytes > 0
+            temp_reg = self.__get_free_register()
+            loop_label = "initialization_label"
 
-                self.instructions.append(f"push {temp_reg};")
-                self.instructions.append(f"xor al, al;")
-                self.instructions.append(f"mov {temp_reg}, {total_bytes};")
-                loop_label = f"zero_init_loop_{len(self.instructions)}"
-                self.instructions.append(f"{loop_label}:")
-                
-                # Store zero byte at current position (always using byte operations)
-                self.instructions.append(f"mov BYTE PTR [{register} + {temp_reg}], al;")
-                
-                # Check if counter is still > 0
-                self.instructions.append(f"dec {temp_reg};")
-                self.instructions.append(f"jnz {loop_label};")
-                self.instructions.append(f"pop {temp_reg};")
+            self.instructions.append(f"mov al, {value};")
+            self.instructions.append(f"mov {temp_reg}, {size};")
+            self.instructions.append(f"{loop_label}:")
+
+            # Store zero byte at current position (always using byte operations)
+            self.instructions.append(f"mov BYTE PTR [{register} + {temp_reg}], al;")
+            # Check if counter is still > 0
+            self.instructions.append(f"dec {temp_reg};")
+            self.instructions.append(f"jnz {loop_label};")
 
 
 @v_args(inline=True)
@@ -341,11 +389,18 @@ class EvalTransformer(Transformer):
             if val[0] == "deref":
                 return self.emitter.add_dereference_instruction(register, val[1])
             if val[0] == "array":
-                return self.emitter.add_array_instruction(register, val[1][0])
+                size = _compute_size_typed_value(val[1][0])
+                return self.emitter.add_array_instruction(register, size)
             if val[0] == "array_repeat":
                 assert len(val) == 3
                 # Pass the appropriate values to add_array_instruction
-                return self.emitter.add_array_instruction(register, val[2], val[1])
+                size = _compute_size_typed_value(val[1])
+                return self.emitter.add_array_instruction(register, size, val[1])
+            if val[0] == "array_list":
+                assert len(val) == 3
+                size = _compute_size_typed_value(val[1][0])
+                return self.emitter.add_array_instruction(register, size, val[1])
+
         return self.emitter.add_assignment_instruction(register, val)
 
     def comparison(self, *args):
@@ -392,11 +447,14 @@ class EvalTransformer(Transformer):
         if len(args) == 1:
             # e.g., [17]
             return 'array', [args[0]]
+
         if len(args) == 2:
             init, length = args
-            # e.g., [0; 17], [0u8, 17]
+            # e.g., [0; 17], [0u8: 17]
             return 'array_repeat', init, length
-        raise ValueError("Invalid array syntax")
+
+        r = list(args)
+        return 'array_list', r, len(r)
 
     def typed_atom(self, val, typ=None):
         """ Process typed values
@@ -443,13 +501,15 @@ class EvalTransformer(Transformer):
         return int(token)
 
 
-def parse_constrains(text: str):
+def parse_constrains(text: str,
+                     emitter: Union[None, AssemblyEmitter] = None):
     """ Parse constraints and generate assembly instructions
 
     :param text: the constraint text to parse
     :return: list of generated assembly instructions
     """
-    a = AssemblyEmitter()
-    parser = Lark(GRAMMAR, parser='lalr', transformer=EvalTransformer(a))
+    if emitter is None:
+        emitter = AssemblyEmitter()
+    parser = Lark(GRAMMAR, parser='lalr', transformer=EvalTransformer(emitter))
     _ = parser.parse(text)
-    return a.instructions
+    return emitter.instructions
