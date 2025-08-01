@@ -1,5 +1,6 @@
 # What
-simple wrapper around [nanoBench]https://github.com/andreas-abel/nanoBench()
+simple wrapper around [nanoBench](https://github.com/andreas-abel/nanoBench)
+
 
 # Installation
 ============
